@@ -240,6 +240,19 @@
     .gallery-grid figure:hover img{transform:scale(1.06);}
     .gallery-grid figure:hover::after{opacity:1;}
 
+    /* Sponsorship flyers */
+    .sponsor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:34px;align-items:start;}
+    @media (max-width:760px){
+      .sponsor-grid{grid-template-columns:1fr;max-width:460px;margin-left:auto;margin-right:auto;}
+    }
+    .sponsor-grid a{
+      display:block;border-radius:var(--radius);overflow:hidden;
+      border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow);
+      transition:transform .15s ease, border-color .15s ease;
+    }
+    .sponsor-grid a:hover{transform:translateY(-4px);border-color:rgba(245,166,35,.6);}
+    .sponsor-grid img{width:100%;height:auto;display:block;}
+
     /* Camps — coming soon panel */
     .coming-soon{
       margin-top:36px;text-align:center;position:relative;overflow:hidden;
@@ -402,6 +415,7 @@
         <a href="#about">About</a>
         <a href="pro.html">Pro Team</a>
         <a href="#camps">Camps</a>
+        <a href="#sponsors">Sponsor</a>
         <a href="#contact">Contact</a>
         <a href="#register" class="nav-cta">Register</a>
       </nav>
@@ -555,6 +569,19 @@
     </div>
   </section>
 
+  <!-- ============================== BECOME A SPONSOR ============================== -->
+  <section id="sponsors">
+    <div class="wrap">
+      <span class="eyebrow">Partners</span>
+      <h2>Become a sponsor.</h2>
+      <p class="lead">Support the Foxes and put your brand in front of our community. Review our sponsorship packages below, then reach out to get started — tap an image to view it full size.</p>
+      <div class="sponsor-grid" id="sponsor-grid"></div>
+      <div style="margin-top:30px;">
+        <a id="sponsorCta" class="btn btn-primary" href="#contact">Become a Sponsor</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================== CONTACT ============================== -->
   <section id="contact">
     <div class="wrap">
@@ -644,9 +671,16 @@
        URL here.                                                              */
     shopifyUrl: "https://royaltysports.org/products/recreational-6-week-program",
 
+    /* ---- SPONSORSHIP FLYERS ----
+       Each: { src, alt }. Click opens the full-size image.          */
+    sponsors: [
+      { src: "sponsorship-club.jpg",  alt: "Colorado Foxes FC sponsorship packages — Diamond $10,000, Gold $5,000, Silver $2,500, Bronze $1,000." },
+      { src: "sponsorship-youth.jpg", alt: "Foxes Futures youth soccer sponsorship tiers — Premier Partnership $5,000, Elite Sponsor $2,500, Club Sponsor $1,500, Team Sponsor $500." }
+    ],
+
     /* ---- CONTACT (PLACEHOLDER — replace) ---- */
     contact: {
-      email: "rayreza@coloradofoxesfc.com",
+      email: "rreza@coloradofoxesfc.com",
       phone: "(720) 936-8475",
       socials: [
         { label: "Instagram", url: "#" },   // replace # with real profile URL
@@ -671,6 +705,15 @@
     $("gallery-grid").innerHTML = CONTENT.gallery.map(p => `
       <figure><img src="${p.src}" alt="${p.alt}" loading="lazy"></figure>
     `).join("");
+
+    // Sponsorship flyers (click to view full size)
+    $("sponsor-grid").innerHTML = CONTENT.sponsors.map(s => `
+      <a href="${s.src}" target="_blank" rel="noopener" title="View full size">
+        <img src="${s.src}" alt="${s.alt}" loading="lazy">
+      </a>
+    `).join("");
+    document.getElementById("sponsorCta").href =
+      "mailto:" + CONTENT.contact.email + "?subject=" + encodeURIComponent("Sponsorship Inquiry — Colorado Foxes Futures");
 
     // Location buttons — the 4 big buttons that open the shared form
     $("loc-grid").innerHTML = CONTENT.locations.map((l, i) => `
