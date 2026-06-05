@@ -240,6 +240,23 @@
     .gallery-grid figure:hover img{transform:scale(1.06);}
     .gallery-grid figure:hover::after{opacity:1;}
 
+    /* Camps — coming soon panel */
+    .coming-soon{
+      margin-top:36px;text-align:center;position:relative;overflow:hidden;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--line);border-radius:var(--radius);padding:52px 28px;
+    }
+    .coming-soon::before{content:"";position:absolute;top:0;left:0;height:4px;width:100%;
+      background:linear-gradient(90deg,var(--orange),var(--orange-deep));}
+    .coming-soon .cs-badge{
+      display:inline-block;font-family:"Oswald",sans-serif;text-transform:uppercase;
+      letter-spacing:2px;font-size:13px;font-weight:700;color:#1a1206;
+      background:linear-gradient(180deg,var(--orange),var(--orange-deep));
+      padding:6px 16px;border-radius:999px;margin-bottom:16px;
+    }
+    .coming-soon h3{font-size:clamp(24px,4vw,32px);color:var(--white);margin-bottom:10px;}
+    .coming-soon p{color:var(--muted);font-size:17px;max-width:520px;margin:0 auto 24px;}
+
     /* About paragraphs */
     .mission p{font-size:18px;color:var(--white);max-width:820px;margin:0 0 22px;}
     .mission p:last-child{color:var(--muted);font-style:italic;}
@@ -434,9 +451,12 @@
     <div class="wrap">
       <span class="eyebrow">Camps & Clinics</span>
       <h2>Train with the Foxes.</h2>
-      <p class="lead">Seasonal camps and clinics for every level. Reserve a spot in seconds.</p>
-      <div style="margin-top:18px;"><span class="placeholder-note">Placeholder camps — edit in the data block</span></div>
-      <div class="grid grid-3" id="camps-grid"></div>
+      <div class="coming-soon">
+        <span class="cs-badge">Coming Soon</span>
+        <h3>Foxes camps are on the way</h3>
+        <p>We're putting together seasonal camps and clinics for every level. Check back soon — or register now and we'll keep you posted.</p>
+        <a href="#register" class="btn btn-primary">Register Now</a>
+      </div>
     </div>
   </section>
 
@@ -624,14 +644,6 @@
        URL here.                                                              */
     shopifyUrl: "https://royaltysports.org/products/recreational-6-week-program",
 
-    /* ---- CAMPS (PLACEHOLDER — replace) ----
-       Each: { name, dates, price, location }                     */
-    camps: [
-      { name: "[Camp name — edit me] Summer Skills Camp",  dates: "Camp dates TBD", price: "$000",  location: "[Location — edit me]" },
-      { name: "[Camp name — edit me] Goalkeeper Clinic",   dates: "Camp dates TBD", price: "$000",  location: "[Location — edit me]" },
-      { name: "[Camp name — edit me] Holiday Indoor Camp", dates: "Camp dates TBD", price: "$000",  location: "[Location — edit me]" }
-    ],
-
     /* ---- CONTACT (PLACEHOLDER — replace) ---- */
     contact: {
       email: "rayreza@coloradofoxesfc.com",
@@ -654,17 +666,6 @@
 
     // Hero tagline
     $("hero-tagline").textContent = CONTENT.tagline;
-
-    // Camps (informational) — button scrolls to the location picker
-    $("camps-grid").innerHTML = CONTENT.camps.map(c => `
-      <div class="card">
-        <h3>${c.name}</h3>
-        <p class="meta"><b>Dates:</b> ${c.dates}</p>
-        <p class="meta"><b>Price:</b> ${c.price}</p>
-        <p class="meta"><b>Location:</b> ${c.location}</p>
-        <a class="btn btn-ghost" href="#register">Register</a>
-      </div>
-    `).join("");
 
     // Photo gallery
     $("gallery-grid").innerHTML = CONTENT.gallery.map(p => `
