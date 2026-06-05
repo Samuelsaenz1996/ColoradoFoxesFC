@@ -383,7 +383,6 @@
       <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       <nav class="links" id="navLinks">
         <a href="#about">About</a>
-        <a href="#youth">Youth</a>
         <a href="pro.html">Pro Team</a>
         <a href="#camps">Camps</a>
         <a href="#contact">Contact</a>
@@ -402,7 +401,7 @@
       <p class="tagline" id="hero-tagline">Where every player develops a love for the game.</p>
       <div class="hero-cta">
         <a href="#register" class="btn btn-primary">Register Now</a>
-        <a href="#youth" class="btn btn-ghost">Explore the Club</a>
+        <a href="#about" class="btn btn-ghost">Explore the Club</a>
       </div>
     </div>
   </section>
@@ -417,17 +416,6 @@
         <p>We believe that true success is measured not by wins and losses, but by the confidence, character, and passion our players build along the way. Through quality coaching, teamwork, and encouragement, we focus on helping each athlete improve at their own pace while enjoying every moment on the field.</p>
         <p>Winning is celebrated—but never at the expense of development, sportsmanship, or the joy of playing the game.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- ============================== YOUTH DEVELOPMENT ============================== -->
-  <section id="youth">
-    <div class="wrap">
-      <span class="eyebrow">Youth Development</span>
-      <h2>The heart of the club.</h2>
-      <p class="lead">Age-group teams for boys and girls, focused on skill, confidence, and a lifelong love of soccer.</p>
-      <div style="margin-top:18px;"><span class="placeholder-note">Placeholder teams — edit in the data block</span></div>
-      <div class="grid grid-4" id="youth-grid"></div>
     </div>
   </section>
 
@@ -562,10 +550,6 @@
           <div class="value" id="contact-phone">—</div>
         </div>
         <div class="contact-item">
-          <div class="label">Area</div>
-          <div class="value" id="contact-area">—</div>
-        </div>
-        <div class="contact-item">
           <div class="label">Follow Us</div>
           <div class="socials" id="contact-socials"></div>
         </div>
@@ -611,15 +595,6 @@
     // Short tagline shown under the club name in the hero
     tagline: "Where every player develops a love for the game.",
 
-    /* ---- YOUTH TEAMS / AGE GROUPS (PLACEHOLDER — replace) ----
-       Each: { group, gender, desc }                              */
-    youthTeams: [
-      { group: "U8",  gender: "Boys & Girls", desc: "[Placeholder — edit me] First touches, fun, and fundamentals." },
-      { group: "U10", gender: "Boys & Girls", desc: "[Placeholder — edit me] Building ball control and small-sided play." },
-      { group: "U12", gender: "Boys & Girls", desc: "[Placeholder — edit me] Positional awareness and teamwork." },
-      { group: "U14", gender: "Boys & Girls", desc: "[Placeholder — edit me] Competitive development and game IQ." }
-    ],
-
     /* ---- PHOTO GALLERY (kids on the field) ----
        To swap a photo, drop a new image in the folder and change "src".
        Each: { src, alt }                                            */
@@ -661,7 +636,6 @@
     contact: {
       email: "rayreza@coloradofoxesfc.com",
       phone: "(720) 936-8475",
-      area:  "[City / Area — edit me], Colorado",
       socials: [
         { label: "Instagram", url: "#" },   // replace # with real profile URL
         { label: "Facebook",  url: "#" }    // replace # with real profile URL
@@ -680,15 +654,6 @@
 
     // Hero tagline
     $("hero-tagline").textContent = CONTENT.tagline;
-
-    // Youth teams
-    $("youth-grid").innerHTML = CONTENT.youthTeams.map(t => `
-      <div class="card">
-        <span class="tag">${t.gender}</span>
-        <h3>${t.group}</h3>
-        <p>${t.desc}</p>
-      </div>
-    `).join("");
 
     // Camps (informational) — button scrolls to the location picker
     $("camps-grid").innerHTML = CONTENT.camps.map(c => `
@@ -724,7 +689,6 @@
     emailEl.textContent = c.email;
     emailEl.href = "mailto:" + c.email;
     $("contact-phone").textContent = c.phone;
-    $("contact-area").textContent = c.area;
     $("contact-socials").innerHTML = c.socials.map(s =>
       `<a href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`
     ).join("");
