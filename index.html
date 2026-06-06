@@ -300,6 +300,29 @@
     .row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
     @media (max-width:560px){.row{grid-template-columns:1fr;}}
     .form-note{color:var(--muted);font-size:14px;margin-top:8px;}
+
+    /* Liability waiver */
+    .waiver-box{
+      max-height:170px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+      background:#0c0c0f;border:1px solid var(--line);border-radius:10px;
+      padding:14px 16px;margin-bottom:14px;
+      font-size:13.5px;line-height:1.6;color:var(--muted);
+    }
+    .waiver-box h4{
+      font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1px;
+      color:var(--white);font-size:15px;margin:0 0 8px;
+    }
+    .waiver-box p{margin:0 0 10px;}
+    .waiver-box p:last-child{margin-bottom:0;}
+    .waiver-box strong{color:var(--white);}
+    .waiver-check{display:flex;align-items:flex-start;gap:10px;}
+    .waiver-check input{
+      width:20px;height:20px;margin:2px 0 0;flex:0 0 auto;cursor:pointer;accent-color:var(--orange);
+    }
+    .waiver-check label{
+      font-family:"Inter",sans-serif;text-transform:none;letter-spacing:normal;
+      font-size:14px;line-height:1.5;color:var(--white);margin:0;cursor:pointer;
+    }
     /* Pay-to-finish modal */
     .modal-overlay{
       position:fixed;inset:0;z-index:200;display:none;
@@ -600,6 +623,27 @@
           <div class="field">
             <label for="notes">Notes / Message</label>
             <textarea id="notes" name="notes" placeholder="Anything we should know? (optional)"></textarea>
+          </div>
+
+          <!-- ====================================================================
+               LIABILITY WAIVER — edit the wording below to suit your club.
+               Recommended: have your own attorney review it before relying on it.
+               ==================================================================== -->
+          <div class="field">
+            <label>Liability Waiver &amp; Release <span class="req">*</span></label>
+            <div class="waiver-box" tabindex="0">
+              <h4>Liability Waiver, Release &amp; Assumption of Risk</h4>
+              <p>In consideration of being permitted to participate in the programs, training, practices, games, camps, and related activities (the "Activities") offered by Colorado Foxes Futures (the "Club"), I, the parent or legal guardian of the participant named above (or the participant, if 18 or older), acknowledge and agree to the following:</p>
+              <p><strong>1. Assumption of Risk.</strong> I understand that participation in soccer and related physical activity involves inherent risks, including but not limited to falls, collisions with other participants, equipment, or playing surfaces; muscle, joint, and bone injuries; concussion; and in rare cases permanent disability or death. I knowingly and voluntarily assume all such risks, whether known or unknown.</p>
+              <p><strong>2. Release and Waiver of Liability.</strong> I hereby release, waive, and discharge Colorado Foxes Futures and its coaches, staff, volunteers, directors, sponsors, and affiliated organizations (the "Released Parties") from any and all claims, demands, or liability for any injury, illness, loss, or damage to person or property arising out of or related to participation in the Activities, except to the extent caused by gross negligence or willful misconduct.</p>
+              <p><strong>3. Medical Authorization.</strong> I authorize the Released Parties to obtain or administer emergency medical treatment for the participant if needed, and I accept responsibility for any costs of such treatment. I certify that the participant is in good health and physically able to take part in the Activities.</p>
+              <p><strong>4. Photo &amp; Media Release.</strong> I grant the Club permission to use photographs, video, or other media of the participant taken during the Activities for promotional or informational purposes without compensation. (If you do not consent, please note this in the Notes field above.)</p>
+              <p><strong>5. Agreement.</strong> I have read this waiver and release, fully understand its terms, and agree to it freely. It is binding to the fullest extent permitted by law and is governed by the laws of the State of Colorado.</p>
+            </div>
+            <div class="waiver-check">
+              <input type="checkbox" id="waiver" name="waiver_accepted" value="Yes — read and accepted" required>
+              <label for="waiver">I have read, understand, and agree to the Liability Waiver &amp; Release above, and I am the parent/legal guardian of the participant (or am 18 or older registering myself).</label>
+            </div>
           </div>
 
           <button type="submit" class="btn btn-primary">Submit Registration</button>
