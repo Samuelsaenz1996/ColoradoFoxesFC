@@ -328,6 +328,19 @@
       font-size:13px;padding:6px;
     }
     .modal .later:hover{color:var(--orange);text-decoration:underline;}
+    .modal .pay-info{
+      background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.35);
+      border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.5;
+      color:var(--muted);text-align:left;margin:0 0 18px;
+    }
+    .modal .pay-info strong{color:var(--white);}
+    .modal .done-check{
+      width:66px;height:66px;border-radius:50%;margin:0 auto 16px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:36px;font-weight:700;color:#1a1206;
+      background:linear-gradient(180deg,var(--orange),var(--orange-deep));
+      box-shadow:0 10px 24px rgba(243,146,0,.3);
+    }
 
     /* Big location buttons */
     .loc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:34px;}
@@ -618,20 +631,37 @@
   <div class="modal-overlay" id="payModal" role="dialog" aria-modal="true" aria-labelledby="payModalTitle">
     <div class="modal">
       <button class="modal-close" id="payModalClose" aria-label="Close">&times;</button>
-      <h3 id="payModalTitle">Almost done!</h3>
-      <p>Thanks, <span id="payModalName">there</span>! Your form was submitted.<br>
-         <strong style="color:var(--white)">To finish registering, choose how to pay:</strong></p>
-      <div class="modal-actions">
-        <a id="payCardBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener">Pay with Card</a>
-        <button id="payAltBtn" class="btn btn-ghost" type="button">Pay with Venmo or Zelle</button>
+
+      <!-- STEP 1: choose a payment method -->
+      <div id="payStep">
+        <h3 id="payModalTitle">Almost done!</h3>
+        <p>Thanks, <span id="payModalName">there</span>! We've received your registration.<br>
+           <strong style="color:var(--white)">To finish, complete your payment below.</strong></p>
+        <p class="pay-info">Selecting <strong>Pay with Card</strong> opens a secure checkout in a new tab. Once your payment is complete, please return to this tab and choose <strong>"I've completed payment"</strong> to finalize your registration.</p>
+        <div class="modal-actions">
+          <a id="payCardBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener">Pay with Card</a>
+          <button id="payAltBtn" class="btn btn-ghost" type="button">Pay with Venmo or Zelle</button>
+        </div>
+        <div class="pay-alt" id="payAltDetails" hidden>
+          <p>Send your registration payment to:</p>
+          <div class="pay-line"><span>Zelle</span><strong id="zelleVal">—</strong></div>
+          <div class="pay-line"><span>Venmo</span><strong id="venmoVal">—</strong></div>
+          <p class="form-note" style="margin-top:10px;">Please include the player's name in the payment note so we can match it to the registration.</p>
+        </div>
+        <div id="confirmRow" hidden>
+          <p class="form-note" style="margin:16px 0 8px;">Finished paying? Confirm below to complete your registration.</p>
+          <button id="payConfirmBtn" class="btn btn-primary" type="button" style="width:100%;">I've completed payment ✓</button>
+        </div>
+        <button class="later" id="payModalLater" type="button">I'll pay later</button>
       </div>
-      <div class="pay-alt" id="payAltDetails" hidden>
-        <p>Send your registration payment to:</p>
-        <div class="pay-line"><span>Zelle</span><strong id="zelleVal">—</strong></div>
-        <div class="pay-line"><span>Venmo</span><strong id="venmoVal">—</strong></div>
-        <p class="form-note" style="margin-top:10px;">Please include the player's name in the payment note so we can match it to the registration.</p>
+
+      <!-- STEP 2: confirmation -->
+      <div id="payDone" hidden>
+        <div class="done-check" aria-hidden="true">✓</div>
+        <h3>You're all set!</h3>
+        <p>Your registration is complete and we've received your details. Your spot is confirmed once your payment is processed. Thank you for joining the Foxes!</p>
+        <button class="btn btn-primary" id="payDoneClose" type="button" style="width:100%;">Done</button>
       </div>
-      <button class="later" id="payModalLater" type="button">I'll pay later</button>
     </div>
   </div>
 
@@ -832,9 +862,13 @@
   (function(){
     const form = document.getElementById("registerForm");
     const payModal = document.getElementById("payModal");
+    const payStep = document.getElementById("payStep");
+    const payDone = document.getElementById("payDone");
     const payCardBtn = document.getElementById("payCardBtn");
     const payAltBtn = document.getElementById("payAltBtn");
     const payAltDetails = document.getElementById("payAltDetails");
+    const confirmRow = document.getElementById("confirmRow");
+    const payConfirmBtn = document.getElementById("payConfirmBtn");
     const nameEl = document.getElementById("payModalName");
 
     // Fill the Venmo / Zelle details from the data block
@@ -854,13 +888,31 @@
       const prog = selectedProgram();
       payCardBtn.href = prog ? prog.payUrl : "#";
 
-      payAltDetails.hidden = true;          // reset Venmo/Zelle panel each time
+      // reset to the first step every time the modal opens
+      payAltDetails.hidden = true;
+      confirmRow.hidden = true;
+      payDone.hidden = true;
+      payStep.hidden = false;
+
       payModal.classList.add("open");
       payCardBtn.focus();
     }
     function closePayModal(){ payModal.classList.remove("open"); }
 
-    payAltBtn.addEventListener("click", () => { payAltDetails.hidden = !payAltDetails.hidden; });
+    // Once a payment method is chosen, reveal the "I've completed payment" button
+    payCardBtn.addEventListener("click", () => { confirmRow.hidden = false; });
+    payAltBtn.addEventListener("click", () => {
+      payAltDetails.hidden = !payAltDetails.hidden;
+      confirmRow.hidden = false;
+    });
+
+    // Confirm → show the "you're all set" view
+    payConfirmBtn.addEventListener("click", () => {
+      payStep.hidden = true;
+      payDone.hidden = false;
+    });
+
+    document.getElementById("payDoneClose").addEventListener("click", closePayModal);
     document.getElementById("payModalClose").addEventListener("click", closePayModal);
     document.getElementById("payModalLater").addEventListener("click", closePayModal);
     payModal.addEventListener("click", (e) => { if (e.target === payModal) closePayModal(); });
