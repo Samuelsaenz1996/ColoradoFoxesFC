@@ -894,6 +894,15 @@
     }
     function closePayModal(){ payModal.classList.remove("open"); }
 
+    // After a successful submit, clear the form and return to a clean state
+    function resetRegistration(){
+      form.reset();
+      document.getElementById("locationField").value = "";
+      document.getElementById("loc-label").textContent = "—";
+      document.querySelectorAll(".loc-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+      document.getElementById("form-wrap").hidden = true;
+    }
+
     // Once a payment method is chosen, reveal the "I've completed payment" button
     payCardBtn.addEventListener("click", () => { confirmRow.hidden = false; });
     payAltBtn.addEventListener("click", () => {
@@ -928,7 +937,8 @@
         } catch (err) { /* network issue — still guide them to pay */ }
       }
 
-      openPayModal();
+      openPayModal();        // reads the selected program for the pay link first
+      resetRegistration();   // ...then clears the form so it's not confusing
     });
   })();
   </script>
