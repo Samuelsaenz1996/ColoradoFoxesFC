@@ -362,13 +362,32 @@
     .form-loc-head{font-size:22px;color:var(--white);margin-bottom:6px;}
     .form-loc-head .loc-label{color:var(--orange);}
 
-    /* Shopify pay step */
-    .pay-step{
-      margin-top:24px;padding:22px;border:1px dashed rgba(245,166,35,.5);
-      border-radius:var(--radius);background:rgba(245,166,35,.06);
-      display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+    /* Program picker (radio cards) */
+    .program-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media (max-width:560px){.program-options{grid-template-columns:1fr;}}
+    .program-card{
+      position:relative;display:block;cursor:pointer;
+      background:#0c0c0f;border:2px solid var(--line);border-radius:12px;padding:16px;
+      transition:border-color .15s ease, background .15s ease;
     }
-    .pay-step .btn{flex:0 0 auto;}
+    .program-card:hover{border-color:rgba(245,166,35,.5);}
+    .program-card input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0;}
+    .program-card:has(input:checked){border-color:var(--orange);background:rgba(245,166,35,.08);}
+    .program-card:has(input:focus-visible){box-shadow:0 0 0 3px rgba(245,166,35,.25);}
+    .pc-body{display:flex;flex-direction:column;gap:3px;}
+    .pc-ages{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:13px;color:var(--orange);}
+    .pc-title{font-weight:600;color:var(--white);font-size:16px;}
+    .pc-desc{color:var(--muted);font-size:14px;}
+
+    /* Modal Venmo/Zelle details */
+    .modal .pay-alt{margin-top:18px;border-top:1px solid var(--line);padding-top:18px;text-align:left;}
+    .modal .pay-alt > p{color:var(--white);font-size:15px;margin:0 0 10px;}
+    .pay-line{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      background:#0c0c0f;border:1px solid var(--line);border-radius:8px;padding:11px 14px;margin-bottom:8px;
+    }
+    .pay-line span{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:13px;color:var(--orange);}
+    .pay-line strong{color:var(--white);font-size:16px;}
 
     /* ============================================================
        CONTACT + FOOTER
@@ -505,6 +524,11 @@
           <!-- Auto-filled from the location button the user clicked -->
           <input type="hidden" name="location" id="locationField" value="">
 
+          <div class="field">
+            <label>Choose a program <span class="req">*</span></label>
+            <div class="program-options" id="program-options"></div>
+          </div>
+
           <div class="row">
             <div class="field">
               <label for="playerName">Player / Participant Name <span class="req">*</span></label>
@@ -551,20 +575,8 @@
           </div>
 
           <button type="submit" class="btn btn-primary">Submit Registration</button>
-          <p class="form-note">By submitting, you'll receive a confirmation from our team.</p>
+          <p class="form-note">After you submit, you'll choose how to pay to finish registering.</p>
         </form>
-
-        <!-- ====================================================================
-             PAYMENT (Shopify) — links out to the registration product.
-             The URL lives in CONTENT.shopifyUrl near the top of this script.
-             ==================================================================== -->
-        <div class="pay-step">
-          <div>
-            <h3 style="font-size:22px;margin-bottom:4px;">Step 2 — Pay & secure your spot</h3>
-            <p class="form-note" style="margin:0;">After submitting the form above, complete your registration fee securely on our store.</p>
-          </div>
-          <a id="payBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener">Pay Registration Fee →</a>
-        </div>
       </div>
     </div>
   </section>
@@ -610,11 +622,18 @@
       <button class="modal-close" id="payModalClose" aria-label="Close">&times;</button>
       <h3 id="payModalTitle">Almost done!</h3>
       <p>Thanks, <span id="payModalName">there</span>! Your form was submitted.<br>
-         <strong style="color:var(--white)">To finish registering, you must complete your payment.</strong></p>
+         <strong style="color:var(--white)">To finish registering, choose how to pay:</strong></p>
       <div class="modal-actions">
-        <a id="payModalBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener">Pay Registration Fee →</a>
-        <button class="later" id="payModalLater" type="button">I'll pay later</button>
+        <a id="payCardBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener">Pay with Card</a>
+        <button id="payAltBtn" class="btn btn-ghost" type="button">Pay with Venmo or Zelle</button>
       </div>
+      <div class="pay-alt" id="payAltDetails" hidden>
+        <p>Send your registration payment to:</p>
+        <div class="pay-line"><span>Zelle</span><strong id="zelleVal">—</strong></div>
+        <div class="pay-line"><span>Venmo</span><strong id="venmoVal">—</strong></div>
+        <p class="form-note" style="margin-top:10px;">Please include the player's name in the payment note so we can match it to the registration.</p>
+      </div>
+      <button class="later" id="payModalLater" type="button">I'll pay later</button>
     </div>
   </div>
 
@@ -665,11 +684,32 @@
       { name: "Denver South", city: "Denver South, Colorado" }
     ],
 
-    /* ---- SHOPIFY PAYMENT LINK ----
-       Where the "Pay Registration Fee" button sends parents. All 4 locations
-       pay this same registration product. To change it, paste a new product
-       URL here.                                                              */
-    shopifyUrl: "https://royaltysports.org/products/recreational-6-week-program",
+    /* ---- PROGRAMS / AGE GROUPS ----
+       Each program has its OWN Shopify checkout (payUrl). The one the parent
+       picks decides where "Pay with Card" sends them.
+       Each: { label, ages, title, desc, payUrl }                            */
+    programs: [
+      {
+        label: "Recreational (Ages 4–7) — 8-Week Program",
+        ages:  "Ages 4–7",
+        title: "Recreational — 8-Week Program",
+        desc:  "8 weeks · 2 sessions/week · 8 games",
+        payUrl:"https://royaltysports.org/products/recreational-8-week-program"
+      },
+      {
+        label: "Hybrid Soccer Season (Ages 8–13) — 10 Weeks",
+        ages:  "Ages 8–13",
+        title: "Hybrid Soccer Season — 10 Weeks",
+        desc:  "10 weeks · 2 sessions/week · 8 league games",
+        payUrl:"https://royaltysports.org/products/hybrid-soccer-season"
+      }
+    ],
+
+    /* ---- ALTERNATE PAYMENT (Venmo / Zelle) ---- */
+    payment: {
+      zelle: "720-936-8475",
+      venmo: "@Raymundo-Reza"
+    },
 
     /* ---- SPONSORSHIP FLYERS ----
        Each: { src, alt }. Click opens the full-size image.          */
@@ -724,8 +764,17 @@
       </button>
     `).join("");
 
-    // Shopify pay button
-    document.getElementById("payBtn").href = CONTENT.shopifyUrl;
+    // Program options (age groups) — radio cards, each carries its own pay link
+    $("program-options").innerHTML = CONTENT.programs.map(p => `
+      <label class="program-card">
+        <input type="radio" name="program" value="${p.label}" required>
+        <span class="pc-body">
+          <span class="pc-ages">${p.ages}</span>
+          <span class="pc-title">${p.title}</span>
+          <span class="pc-desc">${p.desc}</span>
+        </span>
+      </label>
+    `).join("");
 
     // Contact
     const c = CONTENT.contact;
@@ -785,20 +834,35 @@
   (function(){
     const form = document.getElementById("registerForm");
     const payModal = document.getElementById("payModal");
-    const payModalBtn = document.getElementById("payModalBtn");
+    const payCardBtn = document.getElementById("payCardBtn");
+    const payAltBtn = document.getElementById("payAltBtn");
+    const payAltDetails = document.getElementById("payAltDetails");
     const nameEl = document.getElementById("payModalName");
 
-    // Both the inline button and the modal button go to the same pay link
-    payModalBtn.href = CONTENT.shopifyUrl;
+    // Fill the Venmo / Zelle details from the data block
+    document.getElementById("zelleVal").textContent = CONTENT.payment.zelle;
+    document.getElementById("venmoVal").textContent = CONTENT.payment.venmo;
+
+    function selectedProgram(){
+      const checked = form.querySelector('input[name="program"]:checked');
+      return checked ? CONTENT.programs.find(p => p.label === checked.value) : null;
+    }
 
     function openPayModal(){
       const name = (document.getElementById("playerName").value || "").trim();
       nameEl.textContent = name ? name.split(/\s+/)[0] : "there";
+
+      // "Pay with Card" goes to the selected program's own Shopify checkout
+      const prog = selectedProgram();
+      payCardBtn.href = prog ? prog.payUrl : "#";
+
+      payAltDetails.hidden = true;          // reset Venmo/Zelle panel each time
       payModal.classList.add("open");
-      payModalBtn.focus();
+      payCardBtn.focus();
     }
     function closePayModal(){ payModal.classList.remove("open"); }
 
+    payAltBtn.addEventListener("click", () => { payAltDetails.hidden = !payAltDetails.hidden; });
     document.getElementById("payModalClose").addEventListener("click", closePayModal);
     document.getElementById("payModalLater").addEventListener("click", closePayModal);
     payModal.addEventListener("click", (e) => { if (e.target === payModal) closePayModal(); });
