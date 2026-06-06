@@ -634,9 +634,8 @@
 
       <!-- STEP 1: choose a payment method -->
       <div id="payStep">
-        <h3 id="payModalTitle">Almost done!</h3>
-        <p>Thanks, <span id="payModalName">there</span>! We've received your registration.<br>
-           <strong style="color:var(--white)">To finish, complete your payment below.</strong></p>
+        <h3 id="payModalTitle">One last step — payment</h3>
+        <p><strong style="color:var(--white)">Your registration isn't finalized until payment is complete.</strong> Please complete your payment below, then return to this tab to confirm.</p>
         <p class="pay-info">Selecting <strong>Pay with Card</strong> opens a secure checkout in a new tab. Once your payment is complete, please return to this tab and choose <strong>"I've completed payment"</strong> to finalize your registration.</p>
         <div class="modal-actions">
           <a id="payCardBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener">Pay with Card</a>
@@ -869,7 +868,6 @@
     const payAltDetails = document.getElementById("payAltDetails");
     const confirmRow = document.getElementById("confirmRow");
     const payConfirmBtn = document.getElementById("payConfirmBtn");
-    const nameEl = document.getElementById("payModalName");
 
     // Fill the Venmo / Zelle details from the data block
     document.getElementById("zelleVal").textContent = CONTENT.payment.zelle;
@@ -881,9 +879,6 @@
     }
 
     function openPayModal(){
-      const name = (document.getElementById("playerName").value || "").trim();
-      nameEl.textContent = name ? name.split(/\s+/)[0] : "there";
-
       // "Pay with Card" goes to the selected program's own Shopify checkout
       const prog = selectedProgram();
       payCardBtn.href = prog ? prog.payUrl : "#";
