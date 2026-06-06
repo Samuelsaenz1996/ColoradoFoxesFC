@@ -70,7 +70,7 @@
     nav.links a.nav-cta:hover{color:#1a1206;}
     .menu-btn{display:none;background:transparent;border:1px solid var(--line);color:var(--white);
       border-radius:8px;padding:8px 12px;cursor:pointer;font-size:20px;line-height:1;}
-    @media (max-width:700px){
+    @media (max-width:880px){
       nav.links{position:absolute;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;
         gap:0;background:var(--near-black);border-bottom:1px solid var(--line);
         padding:8px 12px 16px;display:none;}
@@ -116,6 +116,13 @@
     footer .copy{color:var(--muted);font-size:14px;}
     footer .pro-line{color:var(--orange);font-size:14px;margin-top:6px;
       font-family:"Oswald",sans-serif;letter-spacing:1px;text-transform:uppercase;}
+
+    /* Mobile refinements */
+    @media (max-width:600px){
+      section{padding:52px 0;}
+      .pro-hero{padding:54px 0 50px;}
+      .pro-hero .crest{width:112px;height:112px;margin-bottom:18px;}
+    }
   </style>
 </head>
 <body>
