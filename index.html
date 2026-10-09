@@ -192,26 +192,49 @@
        ============================================================ */
     .hero{
       position:relative;text-align:center;overflow:hidden;
-      min-height:min(88vh,780px);display:flex;align-items:center;
-      padding:110px 0 100px;background:var(--black);
+      min-height:min(90vh,800px);display:flex;align-items:center;
+      padding:90px 0 100px;background:var(--black);
     }
-    .hero-bg{
-      position:absolute;inset:0;
-      background:url("kids-1.jpg") center 30%/cover no-repeat;
-      animation:hero-zoom 18s ease-out both;
+    /* Black backdrop: soft orange glow behind the crest + faint grid that fades out */
+    .hero-bg{position:absolute;inset:0;pointer-events:none;}
+    .hero-bg::before{
+      content:"";position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:56px 56px;background-position:center;
+      -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+              mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
     }
     .hero-bg::after{
-      content:"";position:absolute;inset:0;
-      background:
-        radial-gradient(800px 420px at 50% 20%, rgba(245,166,35,.18), transparent 70%),
-        linear-gradient(180deg, rgba(11,11,13,.62) 0%, rgba(11,11,13,.72) 55%, var(--black) 100%);
+      content:"";position:absolute;left:50%;top:34%;
+      width:min(760px,120vw);aspect-ratio:1;transform:translate(-50%,-50%);
+      background:radial-gradient(circle, rgba(245,166,35,.30) 0%, rgba(243,146,0,.10) 35%, transparent 65%);
+      animation:hero-glow 6s ease-in-out infinite;
     }
-    @keyframes hero-zoom{from{transform:scale(1.12);}to{transform:scale(1.02);}}
-    @media (prefers-reduced-motion:reduce){.hero-bg{animation:none;}}
+    @keyframes hero-glow{0%,100%{opacity:.75;}50%{opacity:1;}}
+    /* Thin orange line along the bottom edge of the hero */
+    .hero::after{
+      content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(245,166,35,.6),transparent);
+    }
     .hero > .wrap{position:relative;z-index:1;width:100%;}
     .hero .crest{
-      width:92px;height:92px;object-fit:contain;margin:0 auto 22px;
-      filter:drop-shadow(0 10px 24px rgba(0,0,0,.6));
+      width:clamp(150px,22vw,220px);height:auto;object-fit:contain;margin:0 auto 26px;
+      border-radius:22px;
+      box-shadow:0 0 0 1px rgba(245,166,35,.25), 0 24px 70px rgba(243,146,0,.28), 0 20px 50px rgba(0,0,0,.7);
+      animation:crest-in .9s cubic-bezier(.2,.8,.2,1) both, crest-float 7s ease-in-out 1s infinite;
+    }
+    @keyframes crest-in{from{opacity:0;transform:translateY(18px) scale(.92);}to{opacity:1;transform:none;}}
+    @keyframes crest-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+    .hero h1, .hero .tagline, .hero-cta, .hero-facts{animation:hero-up .8s ease both;}
+    .hero h1{animation-delay:.15s;}
+    .hero .tagline{animation-delay:.25s;}
+    .hero-cta{animation-delay:.35s;}
+    .hero-facts{animation-delay:.45s;}
+    @keyframes hero-up{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+    @media (prefers-reduced-motion:reduce){
+      .hero-bg::after, .hero .crest, .hero h1, .hero .tagline, .hero-cta, .hero-facts{animation:none;}
     }
     .hero h1{font-size:clamp(42px,8.5vw,92px);text-shadow:0 6px 30px rgba(0,0,0,.45);}
     .hero h1 .accent{color:var(--orange);}
@@ -289,13 +312,15 @@
        PHOTO BAND (full-width photo with a quote)
        ============================================================ */
     .photo-band{
-      position:relative;padding:150px 0;text-align:center;overflow:hidden;
-      background:url("kids-6.jpg") center 28%/cover no-repeat;
+      position:relative;padding:120px 0;text-align:center;overflow:hidden;
+      min-height:640px;display:flex;align-items:center;
+      background:url("kids-6.jpg") center 18%/cover no-repeat;
     }
     .photo-band::before{
       content:"";position:absolute;inset:0;
-      background:linear-gradient(180deg,var(--black) 0%,rgba(11,11,13,.62) 22%,rgba(11,11,13,.62) 78%,var(--black) 100%);
+      background:linear-gradient(180deg,var(--black) 0%,rgba(11,11,13,.58) 10%,rgba(11,11,13,.58) 90%,var(--black) 100%);
     }
+    .photo-band .wrap{width:100%;}
     .photo-band .wrap{position:relative;}
     .band-quote{
       font-family:"Oswald",sans-serif;text-transform:uppercase;font-weight:600;
@@ -651,10 +676,10 @@
     @media (max-width:600px){
       section{padding:64px 0;}
       .hero{padding:80px 0 72px;min-height:auto;}
-      .hero .crest{width:76px;height:76px;margin-bottom:18px;}
+      .hero .crest{width:150px;margin-bottom:20px;border-radius:18px;}
       .coming-soon{padding:24px 20px;}
       .prog{padding:24px;}
-      .photo-band{padding:100px 0;}
+      .photo-band{padding:90px 0;min-height:480px;}
       .form-wrap{padding:22px 18px;}
       .modal{padding:26px 20px;}
       .pay-line{flex-wrap:wrap;}
@@ -1023,8 +1048,8 @@
 
     /* ---- PHOTO GALLERY (kids on the field) ----
        To swap a photo, drop a new image in the folder and change "src".
-       The FIRST photo is shown large. (kids-1 is also the hero background,
-       kids-6 the full-width photo band — those are set in the CSS.)
+       The FIRST photo is shown large. (kids-6 is also the full-width
+       photo band behind the quote — that one is set in the CSS.)
        Each: { src, alt }                                            */
     gallery: [
       { src: "kids-4.jpg", alt: "Kids playing soccer with the Colorado Foxes" },
