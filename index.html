@@ -395,6 +395,34 @@
       border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,166,35,.25);
     }
 
+    /* "Coming soon" location cards (not yet registering) */
+    .loc-btn.loc-soon{
+      text-decoration:none;border-style:dashed;border-color:rgba(245,166,35,.35);
+      background:
+        repeating-linear-gradient(135deg,rgba(245,166,35,.05) 0 12px,transparent 12px 24px),
+        linear-gradient(180deg,var(--panel),var(--panel-2));
+    }
+    .loc-btn.loc-soon::before{background:linear-gradient(180deg,rgba(245,166,35,.35),rgba(245,166,35,.1));}
+    .loc-btn.loc-soon::after{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.07) 50%,transparent 70%);
+      transform:translateX(-100%);animation:soon-shine 3.5s ease-in-out infinite;
+    }
+    @keyframes soon-shine{0%,40%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+    @media (prefers-reduced-motion:reduce){.loc-btn.loc-soon::after{animation:none;display:none;}}
+    .loc-btn.loc-soon .loc-name{color:rgba(255,255,255,.85);}
+    .loc-soon-badge{
+      position:absolute;top:14px;right:14px;
+      font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1.5px;
+      font-size:11px;font-weight:700;color:#1a1206;padding:4px 10px;border-radius:999px;
+      background:linear-gradient(180deg,var(--orange),var(--orange-deep));
+      box-shadow:0 4px 14px rgba(243,146,0,.35);
+    }
+    .loc-btn.loc-soon .loc-go{color:var(--muted);}
+    .loc-btn.loc-soon:hover .loc-go{color:var(--orange);}
+
+    .program-note{color:var(--muted);font-size:13px;margin-top:10px;}
+
     .form-loc-head{font-size:22px;color:var(--white);margin-bottom:6px;}
     .form-loc-head .loc-label{color:var(--orange);}
 
@@ -414,6 +442,7 @@
     .pc-ages{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:13px;color:var(--orange);}
     .pc-title{font-weight:600;color:var(--white);font-size:16px;}
     .pc-desc{color:var(--muted);font-size:14px;}
+    .pc-price{font-family:"Oswald",sans-serif;font-weight:700;font-size:20px;color:var(--white);margin-top:4px;}
 
     /* Modal Venmo/Zelle details */
     .modal .pay-alt{margin-top:18px;border-top:1px solid var(--line);padding-top:18px;text-align:left;}
@@ -587,6 +616,7 @@
           <div class="field">
             <label>Choose a program <span class="req">*</span></label>
             <div class="program-options" id="program-options"></div>
+            <p class="program-note">Sessions are held outdoors while weather allows and move indoors once the snow season arrives.</p>
           </div>
 
           <div class="row">
@@ -773,32 +803,39 @@
     /* ---- REGISTRATION LOCATIONS ----
        The 4 big buttons in the Register section. Each opens the SAME form;
        the chosen location is sent to Formspree in the hidden "location" field.
-       Each: { name, city }                                        */
+       Each: { name, city, comingSoon? }
+       comingSoon: true shows a "Coming Soon" card instead of opening the form. */
     locations: [
       { name: "Montbello",    city: "Montbello, Colorado" },
-      { name: "Thornton",     city: "Thornton, Colorado" },
-      { name: "Arvada",       city: "Arvada, Colorado" },
+      { name: "Thornton",     city: "Thornton, Colorado", comingSoon: true },
+      { name: "Arvada",       city: "Arvada, Colorado",   comingSoon: true },
       { name: "Denver South", city: "Denver South, Colorado" }
     ],
 
     /* ---- PROGRAMS / AGE GROUPS ----
        Each program has its OWN Shopify checkout (payUrl). The one the parent
-       picks decides where "Pay with Card" sends them.
-       Each: { label, ages, title, desc, payUrl }                            */
+       picks decides where "Pay with Card" sends them. payUrl is either one
+       link for every location, or { "Location Name": link } per location.
+       Each: { label, ages, title, desc, price, payUrl }                     */
     programs: [
       {
-        label: "Recreational (Ages 4–6) — 8-Week Program",
-        ages:  "Ages 4–6",
-        title: "Recreational — 8-Week Program",
-        desc:  "8 weeks · 2 sessions/week · 8 games",
-        payUrl:"https://royaltysports.org/products/recreational-8-week-program"
+        label: "Futures (Ages 3–5) — Fall/Winter Season, Oct 2 – Nov 6",
+        ages:  "Ages 3–5",
+        title: "Futures — Fall/Winter Season",
+        desc:  "Oct 2 – Nov 6 · 1 training/week · 6 Saturday games",
+        price: "$135",
+        payUrl:"https://royaltysports.org/products/futures-fall-winter-season-october-2nd-november-6th-ages-3-5"
       },
       {
-        label: "Hybrid Soccer Season (Ages 7–12) — 10 Weeks",
-        ages:  "Ages 7–12",
-        title: "Hybrid Soccer Season — 10 Weeks",
-        desc:  "10 weeks · 2 sessions/week · 8 league games",
-        payUrl:"https://royaltysports.org/products/hybrid-soccer-season"
+        label: "Hybrid (Ages 6–13) — Fall/Winter Season, Oct 5 – Dec 4",
+        ages:  "Ages 6–13",
+        title: "Hybrid — Fall/Winter Season",
+        desc:  "Oct 5 – Dec 4 · 2 trainings/week · 6 Saturday games",
+        price: "$320",
+        payUrl: {
+          "Montbello":    "https://royaltysports.org/products/hybrid-fall-winter-season-october5th-dec-4th-ages-6-13",
+          "Denver South": "https://royaltysports.org/products/denver-south-hybrid-fall-winter-season-october5th-dec-4th-ages-6-13"
+        }
       }
     ],
 
@@ -853,7 +890,14 @@
       "mailto:" + CONTENT.contact.email + "?subject=" + encodeURIComponent("Sponsorship Inquiry — Colorado Foxes Futures");
 
     // Location buttons — the 4 big buttons that open the shared form
-    $("loc-grid").innerHTML = CONTENT.locations.map((l, i) => `
+    $("loc-grid").innerHTML = CONTENT.locations.map((l, i) => l.comingSoon ? `
+      <a class="loc-btn loc-soon" href="#contact" aria-label="${l.name} — coming soon. Contact us for updates.">
+        <span class="loc-soon-badge">Coming Soon</span>
+        <span class="loc-name">${l.name}</span>
+        <span class="loc-city">${l.city}</span>
+        <span class="loc-go">Get notified →</span>
+      </a>
+    ` : `
       <button class="loc-btn" type="button" data-loc-index="${i}" aria-pressed="false">
         <span class="loc-name">${l.name}</span>
         <span class="loc-city">${l.city}</span>
@@ -869,6 +913,7 @@
           <span class="pc-ages">${p.ages}</span>
           <span class="pc-title">${p.title}</span>
           <span class="pc-desc">${p.desc}</span>
+          <span class="pc-price">${p.price}</span>
         </span>
       </label>
     `).join("");
@@ -954,8 +999,12 @@
 
     function openPayModal(){
       // "Pay with Card" goes to the selected program's own Shopify checkout
+      // (per-location link when the program has one for each location)
       const prog = selectedProgram();
-      payCardBtn.href = prog ? prog.payUrl : "#";
+      const loc = document.getElementById("locationField").value;
+      const url = !prog ? null
+        : typeof prog.payUrl === "string" ? prog.payUrl : prog.payUrl[loc];
+      payCardBtn.href = url || "#";
 
       // reset to the first step every time the modal opens
       payAltDetails.hidden = true;
