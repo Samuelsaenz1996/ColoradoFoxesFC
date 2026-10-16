@@ -4,11 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pro Indoor Team — Colorado Foxes Futures</title>
-  <meta name="description" content="The Colorado Foxes professional indoor men's team — the pinnacle of the crest our youth players aspire to.">
+  <meta name="description" content="The Colorado Foxes professional indoor men's team, competing in Major League Indoor Soccer (MLIS). Register for pro team tryouts.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lets the CSS know JS is on (scroll-in animations only hide content when it is) -->
+  <script>document.documentElement.classList.add("js");</script>
 
   <style>
     :root{
@@ -23,8 +26,7 @@
       font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       line-height:1.6;-webkit-font-smoothing:antialiased;
       background-image:
-        radial-gradient(1000px 500px at 100% -10%, rgba(243,146,0,.14), transparent 60%),
-        radial-gradient(900px 500px at -10% 10%, rgba(245,166,35,.07), transparent 55%),
+        radial-gradient(1000px 500px at 100% -10%, rgba(243,146,0,.10), transparent 60%),
         linear-gradient(180deg, #0e0e12, #08080a);
       background-attachment:fixed;
     }
@@ -34,24 +36,38 @@
     a:hover{text-decoration:underline;}
     img{max-width:100%;display:block;}
     .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
-    .eyebrow{display:inline-block;font-family:"Oswald",sans-serif;text-transform:uppercase;
-      letter-spacing:2px;font-size:13px;color:var(--orange);border:1px solid rgba(245,166,35,.4);
-      border-radius:999px;padding:5px 14px;margin-bottom:18px;}
-    .lead{color:var(--muted);font-size:18px;max-width:760px;}
-    .placeholder-note{display:inline-block;font-size:12px;letter-spacing:1px;text-transform:uppercase;
-      color:var(--orange);background:rgba(245,166,35,.1);border:1px dashed rgba(245,166,35,.5);
-      padding:4px 10px;border-radius:6px;margin-bottom:20px;font-family:"Oswald",sans-serif;}
+
+    /* Section label (short orange rule + small caps text) */
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:"Oswald",sans-serif;
+      text-transform:uppercase;letter-spacing:2.5px;font-size:13px;color:var(--orange);margin-bottom:14px;}
+    .eyebrow::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--orange);}
+    .lead{color:var(--muted);font-size:18px;max-width:760px;margin:14px 0 0;}
 
     .btn{display:inline-block;cursor:pointer;font-family:"Oswald",sans-serif;text-transform:uppercase;
       letter-spacing:1px;font-weight:600;font-size:16px;padding:14px 26px;border-radius:10px;
-      border:2px solid transparent;transition:transform .12s ease;}
+      border:2px solid transparent;transition:transform .12s ease, background .15s ease;text-align:center;}
     .btn-primary{background:linear-gradient(180deg,var(--orange),var(--orange-deep));color:#1a1206;
       box-shadow:0 10px 24px rgba(243,146,0,.28);}
     .btn-primary:hover{transform:translateY(-2px);text-decoration:none;}
-    .btn-ghost{background:transparent;color:var(--orange);border:2px solid rgba(245,166,35,.5);}
-    .btn-ghost:hover{background:rgba(245,166,35,.08);text-decoration:none;}
+    .btn-ghost{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.3);}
+    .btn-ghost:hover{background:rgba(255,255,255,.06);text-decoration:none;}
 
-    /* NAV */
+    section{padding:96px 0;}
+    section h2{font-size:clamp(28px,5vw,46px);}
+    .section-alt{background:linear-gradient(180deg,#111115,#0e0e12);
+      border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+
+    /* Scroll-in reveal */
+    .js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s ease;}
+    .js .reveal.in{opacity:1;transform:none;}
+    @media (prefers-reduced-motion:reduce){
+      .js .reveal{opacity:1;transform:none;transition:none;}
+      html{scroll-behavior:auto;}
+    }
+
+    /* ============================================================
+       NAV
+       ============================================================ */
     header.nav{position:sticky;top:0;z-index:100;background:rgba(11,11,13,.86);
       backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;}
@@ -81,47 +97,274 @@
       .brand .wordmark{font-size:16px;white-space:normal;}
     }
 
-    /* HERO */
-    .pro-hero{position:relative;text-align:center;padding:90px 0 70px;
-      background-image:radial-gradient(700px 360px at 50% 0%, rgba(243,146,0,.2), transparent 70%);}
-    .pro-hero .crest{width:130px;height:130px;object-fit:contain;margin:0 auto 22px;
-      filter:drop-shadow(0 14px 30px rgba(0,0,0,.6));}
+    /* ============================================================
+       HERO (black, crest + glow, MLIS badge)
+       ============================================================ */
+    .pro-hero{position:relative;overflow:hidden;text-align:center;padding:90px 0 96px;background:var(--black);}
+    .pro-hero::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:56px 56px;background-position:center;
+      -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+              mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+    }
+    .pro-hero::after{
+      content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(245,166,35,.6),transparent);
+    }
+    .pro-hero .glow{
+      position:absolute;left:50%;top:32%;width:min(760px,120vw);aspect-ratio:1;transform:translate(-50%,-50%);
+      background:radial-gradient(circle, rgba(245,166,35,.28) 0%, rgba(243,146,0,.08) 35%, transparent 65%);
+      pointer-events:none;animation:glow 6s ease-in-out infinite;
+    }
+    @keyframes glow{0%,100%{opacity:.75;}50%{opacity:1;}}
+    .pro-hero .wrap{position:relative;z-index:1;}
+    .pro-hero .crest{
+      width:clamp(130px,18vw,180px);height:auto;margin:0 auto 24px;border-radius:20px;
+      box-shadow:0 0 0 1px rgba(245,166,35,.25), 0 24px 70px rgba(243,146,0,.25), 0 20px 50px rgba(0,0,0,.7);
+      animation:float 7s ease-in-out infinite;
+    }
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
     .pro-flag{display:inline-block;background:var(--orange-deep);color:#1a1206;
       font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:2px;font-size:13px;
       font-weight:700;padding:6px 14px;border-radius:6px;margin-bottom:18px;}
-    .pro-hero h1{font-size:clamp(36px,7vw,72px);}
+    .pro-hero h1{font-size:clamp(38px,7vw,78px);text-shadow:0 6px 30px rgba(0,0,0,.45);}
     .pro-hero h1 .accent{color:var(--orange);}
-    .pro-hero .tagline{color:var(--muted);font-size:clamp(17px,2.5vw,21px);max-width:680px;
-      margin:18px auto 30px;}
+    .pro-hero .tagline{color:rgba(246,246,244,.85);font-size:clamp(17px,2.5vw,21px);max-width:680px;margin:18px auto 30px;}
+    .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .league-badge{
+      display:inline-flex;align-items:center;gap:12px;margin-top:34px;
+      padding:8px 18px 8px 8px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--white);font-size:14px;
+    }
+    .league-badge:hover{text-decoration:none;border-color:rgba(245,166,35,.5);}
+    .league-badge img{width:40px;height:40px;object-fit:contain;}
+    .league-badge b{font-weight:600;}
+    .league-badge span{color:var(--muted);}
+    @media (prefers-reduced-motion:reduce){.pro-hero .glow,.pro-hero .crest{animation:none;}}
 
-    section{padding:70px 0;border-top:1px solid var(--line);}
-    section h2{font-size:clamp(28px,5vw,44px);}
+    /* ============================================================
+       PRO TEAM TRYOUTS
+       ============================================================ */
+    #tryouts{
+      position:relative;overflow:hidden;
+      background:
+        radial-gradient(800px 400px at 0% 0%, rgba(245,166,35,.10), transparent 60%),
+        linear-gradient(180deg,#111115,#0c0c10);
+      border-bottom:1px solid var(--line);
+    }
+    .tryout-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:28px;margin-top:40px;align-items:start;}
+    @media (max-width:900px){.tryout-grid{grid-template-columns:1fr;}}
 
-    .grid{display:grid;gap:20px;margin-top:34px;grid-template-columns:repeat(3,1fr);}
+    /* Event info panel */
+    .event{
+      position:sticky;top:92px;
+      border-radius:18px;border:1px solid rgba(245,166,35,.28);padding:28px;
+      background:
+        radial-gradient(420px 220px at 100% 0%, rgba(245,166,35,.16), transparent 70%),
+        linear-gradient(180deg,var(--panel),var(--panel-2));
+      box-shadow:var(--shadow);
+    }
+    @media (max-width:900px){.event{position:static;}}
+    .event-top{display:flex;gap:18px;align-items:center;margin-bottom:22px;}
+    .date-tile{flex:0 0 auto;width:86px;border-radius:14px;overflow:hidden;text-align:center;
+      background:#0c0c0f;border:1px solid var(--line);}
+    .date-tile .m{display:block;background:linear-gradient(180deg,var(--orange),var(--orange-deep));color:#1a1206;
+      font-family:"Oswald",sans-serif;font-weight:700;letter-spacing:2px;font-size:13px;padding:4px 0;}
+    .date-tile .d{display:block;font-family:"Oswald",sans-serif;font-weight:700;font-size:38px;line-height:1.1;padding-top:4px;}
+    .date-tile .w{display:block;font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding-bottom:7px;}
+    .event-top h3{font-size:28px;}
+    .event-top p{margin:4px 0 0;color:var(--muted);font-size:15px;display:flex;align-items:center;gap:8px;}
+    .event-top p img{width:22px;height:22px;object-fit:contain;}
+    .event-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;}
+    .event-list li{display:flex;gap:12px;align-items:flex-start;font-size:16px;}
+    .event-list .ic{flex:0 0 auto;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      background:rgba(245,166,35,.12);color:var(--orange);}
+    .ic svg, .notice svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .event-list b{display:block;color:var(--white);font-weight:600;}
+    .event-list span{color:var(--muted);font-size:14px;}
+    .event-list a{font-size:14px;}
+    .event-price{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+      margin:22px 0 0;padding:18px 0 0;border-top:1px solid var(--line);}
+    .event-price .amt{font-family:"Oswald",sans-serif;font-weight:700;font-size:44px;line-height:1;}
+    .event-price small{color:var(--muted);font-size:14px;}
+
+    /* "Only registered once paid" notice */
+    .notice{
+      display:flex;gap:12px;align-items:flex-start;margin-top:18px;
+      padding:14px 16px;border-radius:12px;font-size:14.5px;line-height:1.5;color:var(--white);
+      background:rgba(245,166,35,.10);border:1px solid rgba(245,166,35,.45);
+    }
+    .notice svg{flex:0 0 auto;color:var(--orange);margin-top:2px;width:20px;height:20px;}
+    .notice b{color:var(--orange);}
+
+    /* Countdown */
+    .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px;}
+    .countdown div{text-align:center;padding:10px 4px;border-radius:10px;background:#0c0c0f;border:1px solid var(--line);}
+    .countdown b{display:block;font-family:"Oswald",sans-serif;font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums;}
+    .countdown span{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+
+    /* Form panel */
+    .form-wrap{background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:var(--shadow);}
+    .form-wrap h3{font-size:24px;margin-bottom:14px;}
+    .steps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px;padding:0;list-style:none;}
+    .steps li{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;
+      background:#0c0c0f;border:1px solid var(--line);font-size:14px;color:var(--muted);line-height:1.35;}
+    .steps li b{color:var(--white);display:block;font-weight:600;}
+    .steps .n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-family:"Oswald",sans-serif;font-weight:700;font-size:14px;color:#1a1206;
+      background:linear-gradient(180deg,var(--orange),var(--orange-deep));}
+    @media (max-width:460px){.steps{grid-template-columns:1fr;}}
+    .field{margin-bottom:18px;}
+    .field label{display:block;font-weight:600;font-size:14px;color:var(--white);margin-bottom:7px;}
+    .field .req{color:var(--orange);}
+    .field input,.field select,.field textarea{width:100%;background:#0c0c0f;color:var(--white);
+      border:1px solid var(--line);border-radius:10px;padding:13px 14px;font-size:16px;font-family:inherit;}
+    .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,166,35,.18);}
+    .field textarea{min-height:100px;resize:vertical;}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    @media (max-width:560px){.row{grid-template-columns:1fr;}}
+    .form-note{color:var(--muted);font-size:14px;margin-top:10px;}
+
+    /* Position picker (pill radios) */
+    .pills{display:flex;flex-wrap:wrap;gap:8px;}
+    .pill{position:relative;cursor:pointer;}
+    .pill input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;}
+    .pill span{display:block;padding:10px 16px;border-radius:999px;font-size:15px;font-weight:500;
+      background:#0c0c0f;border:1px solid var(--line);color:var(--muted);
+      transition:border-color .15s ease, color .15s ease, background .15s ease;}
+    .pill:hover span{border-color:rgba(245,166,35,.5);color:var(--white);}
+    .pill input:checked + span{border-color:var(--orange);background:rgba(245,166,35,.12);color:var(--white);}
+    .pill input:focus-visible + span{box-shadow:0 0 0 3px rgba(245,166,35,.25);}
+
+    /* Liability waiver */
+    .waiver-box{max-height:170px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+      background:#0c0c0f;border:1px solid var(--line);border-radius:10px;
+      padding:14px 16px;margin-bottom:14px;font-size:13.5px;line-height:1.6;color:var(--muted);}
+    .waiver-box h4{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1px;
+      color:var(--white);font-size:15px;margin:0 0 8px;}
+    .waiver-box p{margin:0 0 10px;}
+    .waiver-box p:last-child{margin-bottom:0;}
+    .waiver-box strong{color:var(--white);}
+    .waiver-check{display:flex;align-items:flex-start;gap:10px;}
+    .waiver-check input{width:20px;height:20px;margin:2px 0 0;flex:0 0 auto;cursor:pointer;accent-color:var(--orange);}
+    .waiver-check label{font-weight:400;font-size:14px;line-height:1.5;color:var(--white);margin:0;cursor:pointer;}
+
+    /* Tryouts closed state (after the event) */
+    .tryout-closed{text-align:center;padding:40px 24px;border-radius:18px;border:1px dashed rgba(245,166,35,.35);
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));}
+    .tryout-closed h3{font-size:26px;margin-bottom:8px;}
+    .tryout-closed p{color:var(--muted);margin:0;}
+
+    /* ============================================================
+       THE LEAGUE (MLIS)
+       ============================================================ */
+    .league-head{display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;}
+    @media (max-width:760px){.league-head{grid-template-columns:1fr;gap:20px;}}
+    .league-logo{
+      width:170px;height:170px;border-radius:24px;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at 50% 40%, rgba(245,166,35,.18), transparent 70%), #0c0c0f;
+      border:1px solid var(--line);box-shadow:var(--shadow);
+    }
+    .league-logo img{width:130px;height:130px;object-fit:contain;}
+    .league-quote{font-family:"Oswald",sans-serif;text-transform:uppercase;color:var(--orange);
+      letter-spacing:1px;font-size:18px;margin-top:16px;}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px;}
+    @media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr);}}
+    .stat{padding:22px;border-radius:var(--radius);border:1px solid var(--line);
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));}
+    .stat b{display:block;font-family:"Oswald",sans-serif;font-weight:700;font-size:40px;line-height:1;color:var(--white);}
+    .stat span{display:block;margin-top:8px;color:var(--muted);font-size:14px;}
+
+    .clubs-title{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:56px 0 18px;}
+    .clubs-title h3{font-size:24px;}
+    .clubs-title a{font-size:15px;}
+    .clubs{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;}
+    @media (max-width:1000px){.clubs{grid-template-columns:repeat(5,1fr);}}
+    @media (max-width:700px){.clubs{grid-template-columns:repeat(3,1fr);}}
+    @media (max-width:420px){.clubs{grid-template-columns:repeat(2,1fr);}}
+    .club{
+      position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;
+      padding:14px 10px 12px;border-radius:14px;border:1px solid var(--line);
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      transition:transform .2s ease, border-color .2s ease;
+    }
+    .club:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.2);}
+    .club .logo{width:100%;aspect-ratio:1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;padding:10px;}
+    .club .logo img{width:100%;height:100%;object-fit:contain;}
+    .club b{font-size:13px;font-weight:600;line-height:1.25;color:var(--white);}
+    .club span{font-size:12px;color:var(--muted);margin-top:-6px;}
+    .club.us{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,166,35,.18), 0 16px 40px rgba(243,146,0,.18);}
+    .club.us::after{
+      content:"Our club";position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+      font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:10px;font-weight:700;
+      color:#1a1206;background:linear-gradient(180deg,var(--orange),var(--orange-deep));padding:2px 8px;border-radius:999px;white-space:nowrap;
+    }
+    .league-source{color:var(--muted);font-size:13px;margin-top:18px;}
+
+    /* ============================================================
+       THE TEAM
+       ============================================================ */
+    .grid{display:grid;gap:20px;margin-top:40px;grid-template-columns:repeat(3,1fr);}
     @media (max-width:760px){.grid{grid-template-columns:1fr;}}
     .card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);
-      border-radius:var(--radius);padding:24px;position:relative;overflow:hidden;}
-    .card::before{content:"";position:absolute;top:0;left:0;height:4px;width:100%;
-      background:linear-gradient(90deg,var(--orange),var(--orange-deep));}
-    .card .tag{display:inline-block;font-family:"Oswald",sans-serif;font-size:13px;letter-spacing:1px;
-      text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
-    .card .meta{color:var(--white);font-weight:600;font-size:16px;margin:4px 0;}
+      border-radius:var(--radius);padding:26px;}
+    .card .tag{display:block;font-family:"Oswald",sans-serif;font-size:13px;letter-spacing:1.5px;
+      text-transform:uppercase;color:var(--orange);margin-bottom:8px;}
+    .card .meta{color:var(--white);font-weight:600;font-size:18px;margin:0;}
 
     .aspire{text-align:center;}
+    .aspire .eyebrow{justify-content:center;}
     .aspire p{color:var(--muted);font-size:18px;max-width:740px;margin:14px auto 28px;}
 
-    footer{border-top:1px solid var(--line);padding:40px 0;text-align:center;
-      background:linear-gradient(180deg,transparent,rgba(0,0,0,.4));}
+    /* ============================================================
+       PAY-TO-FINISH MODAL
+       ============================================================ */
+    .modal-overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+      padding:20px;overflow-y:auto;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);}
+    .modal-overlay.open{display:flex;}
+    .modal{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);
+      border-top:4px solid var(--orange);border-radius:var(--radius);max-width:460px;width:100%;margin:auto;
+      padding:32px 28px;text-align:center;box-shadow:var(--shadow);position:relative;}
+    .modal .step-tag{display:inline-block;font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:2px;
+      font-size:12px;color:var(--orange);margin-bottom:8px;}
+    .modal h3{font-size:28px;margin-bottom:12px;}
+    .modal p{color:var(--muted);font-size:16px;margin:0 0 18px;}
+    .modal .notice{text-align:left;margin:0 0 18px;}
+    .modal .modal-actions{display:flex;flex-direction:column;gap:10px;}
+    .modal .modal-actions .btn{width:100%;}
+    .modal .modal-close{position:absolute;top:8px;right:14px;background:transparent;border:none;
+      color:var(--muted);font-size:28px;cursor:pointer;line-height:1;}
+    .modal .modal-close:hover{color:var(--white);}
+    .modal .later{background:transparent;border:none;color:var(--muted);cursor:pointer;
+      font-size:13px;padding:8px;margin-top:4px;}
+    .modal .later:hover{color:var(--orange);text-decoration:underline;}
+    .modal .done-check{width:66px;height:66px;border-radius:50%;margin:0 auto 16px;
+      display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#1a1206;
+      background:linear-gradient(180deg,var(--orange),var(--orange-deep));box-shadow:0 10px 24px rgba(243,146,0,.3);}
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    footer{border-top:1px solid var(--line);padding:44px 0;text-align:center;
+      background:linear-gradient(180deg,#0e0e12,#08080a);}
     footer .brand{justify-content:center;margin-bottom:14px;}
     footer .copy{color:var(--muted);font-size:14px;}
-    footer .pro-line{color:var(--orange);font-size:14px;margin-top:6px;
+    footer .pro-line{color:var(--orange);font-size:13px;margin-top:6px;
       font-family:"Oswald",sans-serif;letter-spacing:1px;text-transform:uppercase;}
 
     /* Mobile refinements */
     @media (max-width:600px){
-      section{padding:52px 0;}
-      .pro-hero{padding:54px 0 50px;}
-      .pro-hero .crest{width:112px;height:112px;margin-bottom:18px;}
+      section{padding:64px 0;}
+      .pro-hero{padding:60px 0 64px;}
+      .event, .form-wrap{padding:22px 18px;}
+      .modal{padding:26px 20px;}
+      .league-logo{width:130px;height:130px;}
+      .league-logo img{width:100px;height:100px;}
+      .stat b{font-size:32px;}
     }
   </style>
 </head>
@@ -138,54 +381,260 @@
       <nav class="links" id="navLinks">
         <a href="index.html">Home</a>
         <a href="pro.html" class="active">Pro Team</a>
-        <a href="index.html#camps">Camps</a>
-        <a href="index.html#sponsors">Sponsor</a>
+        <a href="#tryouts">Tryouts</a>
+        <a href="#league">The League</a>
         <a href="index.html#contact">Contact</a>
-        <a href="index.html#register" class="nav-cta">Register</a>
+        <a href="index.html#register" class="nav-cta">Youth Register</a>
       </nav>
     </div>
   </header>
 
   <!-- ============================== HERO ============================== -->
   <section class="pro-hero">
+    <div class="glow" aria-hidden="true"></div>
     <div class="wrap">
-      <img class="crest" src="logo2.png" alt="Colorado Foxes Futures crest — shield with mountains">
+      <img class="crest" src="logo2.png" alt="Colorado Foxes crest — shield with mountains">
       <span class="pro-flag">Pro Indoor Men's Team</span>
-      <h1 id="pro-name">The pinnacle of the <span class="accent">crest</span>.</h1>
+      <h1>The pinnacle of the <span class="accent">crest</span>.</h1>
       <p class="tagline" id="pro-tagline"></p>
-      <a href="index.html#register" class="btn btn-primary">Register a Youth Player</a>
+      <div class="hero-cta">
+        <a href="#tryouts" class="btn btn-primary">Register for Tryouts</a>
+        <a href="#league" class="btn btn-ghost">Meet the League</a>
+      </div>
+      <a class="league-badge" href="#league">
+        <img src="mlis/mlis-league.png" alt="">
+        <span>Proud member of <b>Major League Indoor Soccer</b></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================== PRO TEAM TRYOUTS ============================== -->
+  <section id="tryouts">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">Pro Team Tryouts</span>
+        <h2>Earn your spot on the roster.</h2>
+        <p class="lead">Think you've got what it takes to wear the crest in Major League Indoor Soccer? Show us on the field. Register below.</p>
+      </div>
+
+      <div class="tryout-grid">
+        <!-- Event details (filled from TRYOUT in the data block) -->
+        <aside class="event reveal" aria-label="Tryout details">
+          <div class="event-top">
+            <div class="date-tile" aria-hidden="true">
+              <span class="m" id="t-month"></span>
+              <span class="d" id="t-day"></span>
+              <span class="w" id="t-weekday"></span>
+            </div>
+            <div>
+              <h3>Open Tryout</h3>
+              <p><img src="mlis/mlis-league.png" alt="">Colorado Foxes · MLIS</p>
+            </div>
+          </div>
+          <ul class="event-list">
+            <li>
+              <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+              <div><b id="t-date"></b><span>Mark your calendar</span></div>
+            </li>
+            <li>
+              <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+              <div><b id="t-time"></b><span>Arrive early to warm up</span></div>
+            </li>
+            <li>
+              <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <div><b id="t-venue"></b><a id="t-map" href="#" target="_blank" rel="noopener">Get directions →</a></div>
+            </li>
+          </ul>
+          <div class="event-price">
+            <div class="amt" id="t-price"></div>
+            <small>Tryout registration fee</small>
+          </div>
+          <div class="notice" role="note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div>You are <b>only officially registered once your <span class="t-price-inline"></span> fee is paid</b> through our registration link.</div>
+          </div>
+          <div class="countdown" id="t-countdown" aria-label="Time until tryouts">
+            <div><b id="cd-d">0</b><span>Days</span></div>
+            <div><b id="cd-h">00</b><span>Hrs</span></div>
+            <div><b id="cd-m">00</b><span>Min</span></div>
+            <div><b id="cd-s">00</b><span>Sec</span></div>
+          </div>
+        </aside>
+
+        <!-- Registration form -->
+        <div id="tryout-form-area" class="reveal">
+          <div class="form-wrap">
+            <h3>Tryout Registration</h3>
+            <ol class="steps">
+              <li><span class="n">1</span><span><b>Fill out the form</b>Takes about a minute</span></li>
+              <li><span class="n">2</span><span><b>Pay the <span class="t-price-inline"></span> fee</b>Required to be registered</span></li>
+            </ol>
+
+            <!-- Submits to the same Formspree form as youth registration;
+                 "form_type" and the subject line mark it as a pro tryout. -->
+            <form id="tryoutForm" action="https://formspree.io/f/mwvjlpgp" method="POST">
+              <input type="hidden" name="_subject" id="tryoutSubject" value="New Pro Tryout registration">
+              <input type="hidden" name="form_type" value="Pro Team Tryout">
+
+              <div class="row">
+                <div class="field">
+                  <label for="fullName">Full Name <span class="req">*</span></label>
+                  <input type="text" id="fullName" name="full_name" required autocomplete="name">
+                </div>
+                <div class="field">
+                  <label for="tEmail">Email <span class="req">*</span></label>
+                  <input type="email" id="tEmail" name="email" required autocomplete="email">
+                </div>
+              </div>
+
+              <div class="field">
+                <label id="posLabel">Position <span class="req">*</span></label>
+                <div class="pills" role="radiogroup" aria-labelledby="posLabel">
+                  <label class="pill"><input type="radio" name="position" value="Goalkeeper" required><span>Goalkeeper</span></label>
+                  <label class="pill"><input type="radio" name="position" value="Defender"><span>Defender</span></label>
+                  <label class="pill"><input type="radio" name="position" value="Midfielder"><span>Midfielder</span></label>
+                  <label class="pill"><input type="radio" name="position" value="Forward"><span>Forward</span></label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="expLevel">Playing Experience <span class="req">*</span></label>
+                <select id="expLevel" name="experience_level" required>
+                  <option value="" disabled selected>Highest level played…</option>
+                  <option value="Recreational / Adult League">Recreational / Adult League</option>
+                  <option value="High School">High School</option>
+                  <option value="Club / Academy">Club / Academy</option>
+                  <option value="College">College</option>
+                  <option value="Semi-Pro">Semi-Pro</option>
+                  <option value="Professional">Professional</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="expDetails">Tell us about your experience</label>
+                <textarea id="expDetails" name="experience_details" placeholder="Teams, leagues, years played, indoor experience… (optional)"></textarea>
+              </div>
+
+              <!-- ====================================================================
+                   LIABILITY WAIVER — same wording as the youth registration form
+                   on index.html. If you edit one, edit the other to match.
+                   ==================================================================== -->
+              <div class="field">
+                <label>Liability Waiver &amp; Release <span class="req">*</span></label>
+                <div class="waiver-box" tabindex="0">
+                  <h4>Liability Waiver, Release &amp; Assumption of Risk</h4>
+                  <p>In consideration of being permitted to participate in the programs, training, practices, games, camps, and related activities (the "Activities") offered by Colorado Foxes Futures (the "Club"), I, the parent or legal guardian of the participant named above (or the participant, if 18 or older), acknowledge and agree to the following:</p>
+                  <p><strong>1. Assumption of Risk.</strong> I understand that participation in soccer and related physical activity involves inherent risks, including but not limited to falls, collisions with other participants, equipment, or playing surfaces; muscle, joint, and bone injuries; concussion; and in rare cases permanent disability or death. I knowingly and voluntarily assume all such risks, whether known or unknown.</p>
+                  <p><strong>2. Release and Waiver of Liability.</strong> I hereby release, waive, and discharge Colorado Foxes Futures and its coaches, staff, volunteers, directors, sponsors, and affiliated organizations (the "Released Parties") from any and all claims, demands, or liability for any injury, illness, loss, or damage to person or property arising out of or related to participation in the Activities, except to the extent caused by gross negligence or willful misconduct.</p>
+                  <p><strong>3. Medical Authorization.</strong> I authorize the Released Parties to obtain or administer emergency medical treatment for the participant if needed, and I accept responsibility for any costs of such treatment. I certify that the participant is in good health and physically able to take part in the Activities.</p>
+                  <p><strong>4. Photo &amp; Media Release.</strong> I grant the Club permission to use photographs, video, or other media of the participant taken during the Activities for promotional or informational purposes without compensation. (If you do not consent, please note this in the experience field above.)</p>
+                  <p><strong>5. Agreement.</strong> I have read this waiver and release, fully understand its terms, and agree to it freely. It is binding to the fullest extent permitted by law and is governed by the laws of the State of Colorado.</p>
+                </div>
+                <div class="waiver-check">
+                  <input type="checkbox" id="tWaiver" name="waiver_accepted" value="Yes — read and accepted" required>
+                  <label for="tWaiver">I have read, understand, and agree to the Liability Waiver &amp; Release above, and I am the parent/legal guardian of the participant (or am 18 or older registering myself).</label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%;">Submit &amp; Continue to Payment</button>
+              <p class="form-note">Submitting saves your info. <strong style="color:var(--white)">You are only officially registered once the <span class="t-price-inline"></span> fee is paid</strong> through our secure registration link.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== THE LEAGUE (MLIS) ============================== -->
+  <section id="league">
+    <div class="wrap">
+      <div class="league-head reveal">
+        <div class="league-logo"><img src="mlis/mlis-league.png" alt="Major League Indoor Soccer (MLIS) logo"></div>
+        <div>
+          <span class="eyebrow">The League</span>
+          <h2>Major League Indoor Soccer.</h2>
+          <p class="lead">The Colorado Foxes represent Denver in MLIS, a professional indoor soccer league with clubs across the United States and Canada. MLIS also runs a women's league (WMLIS) and a development division (MLISX).</p>
+          <div class="league-quote">“The New Era of Indoor Soccer Starts Here.”</div>
+        </div>
+      </div>
+
+      <!-- League stats (edit in LEAGUE in the data block) -->
+      <div class="stats" id="league-stats"></div>
+
+      <div class="clubs-title reveal">
+        <h3 id="clubs-heading">MLIS Clubs</h3>
+        <a href="https://www.mlispro.com/" target="_blank" rel="noopener">Schedules, standings &amp; stats on MLISpro.com →</a>
+      </div>
+      <!-- Club logo wall (rendered from LEAGUE.clubs) -->
+      <div class="clubs reveal" id="clubs"></div>
+      <p class="league-source">League and club information from <a href="https://www.mlispro.com/" target="_blank" rel="noopener">mlispro.com</a>. Club logos are property of their respective clubs.</p>
     </div>
   </section>
 
   <!-- ============================== PRO DETAILS ============================== -->
-  <section>
+  <section class="section-alt">
     <div class="wrap">
-      <span class="eyebrow">The Team</span>
-      <h2>Same crest. Highest level.</h2>
-      <div style="margin-top:18px;"><span class="placeholder-note">Placeholder pro-team info — edit in the data block</span></div>
-      <div class="grid" id="pro-grid"></div>
+      <div class="reveal">
+        <span class="eyebrow">The Team</span>
+        <h2>Same crest. Highest level.</h2>
+      </div>
+      <div class="grid reveal" id="pro-grid"></div>
     </div>
   </section>
 
   <!-- ============================== ASPIRATION ============================== -->
   <section class="aspire">
-    <div class="wrap">
+    <div class="wrap reveal">
       <span class="eyebrow">For Our Youth</span>
       <h2>Train under the same crest as a pro team.</h2>
       <p>Every young Fox develops with a clear horizon ahead — the professional indoor men's team wearing the very same shield. It's more than a logo; it's the path.</p>
-      <a href="index.html#register" class="btn btn-ghost">Start a Registration</a>
+      <a href="index.html#register" class="btn btn-ghost">Start a Youth Registration</a>
     </div>
   </section>
+
+  <!-- ============================== PAY-TO-FINISH MODAL ============================== -->
+  <div class="modal-overlay" id="payModal" role="dialog" aria-modal="true" aria-labelledby="payModalTitle">
+    <div class="modal">
+      <button class="modal-close" id="payModalClose" aria-label="Close">&times;</button>
+
+      <!-- STEP 2: pay -->
+      <div id="payStep">
+        <span class="step-tag">Step 2 of 2</span>
+        <h3 id="payModalTitle">Pay to complete your registration</h3>
+        <div class="notice" role="note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div>We've received your info, but <b>you are not officially registered until your <span class="t-price-inline"></span> payment is complete.</b></div>
+        </div>
+        <p>The button below opens our secure registration checkout in a new tab. When you're done, come back here and confirm.</p>
+        <div class="modal-actions">
+          <a id="payCardBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener">Pay <span class="t-price-inline"></span> Now</a>
+        </div>
+        <div id="confirmRow" hidden>
+          <p class="form-note" style="margin:16px 0 8px;">Finished paying? Confirm below.</p>
+          <button id="payConfirmBtn" class="btn btn-ghost" type="button" style="width:100%;">I've completed payment ✓</button>
+        </div>
+        <button class="later" id="payModalLater" type="button">I'll pay later (my spot is not reserved until I pay)</button>
+      </div>
+
+      <!-- Confirmation -->
+      <div id="payDone" hidden>
+        <div class="done-check" aria-hidden="true">✓</div>
+        <h3>See you on the field!</h3>
+        <p>Thanks for registering. Once your payment is processed, you're officially registered for tryouts.</p>
+        <button class="btn btn-primary" id="payDoneClose" type="button" style="width:100%;">Done</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================== FOOTER ============================== -->
   <footer>
     <div class="wrap">
       <div class="brand">
         <img src="logo.png" alt="Colorado Foxes Futures logo" style="height:38px;width:38px;object-fit:contain;">
-        <span class="wordmark" style="font-family:Oswald,sans-serif;text-transform:uppercase;font-weight:700;letter-spacing:1px;color:var(--white);">Colorado <span style="color:var(--orange)">Foxes</span> Futures</span>
+        <span class="wordmark">Colorado <span>Foxes</span> Futures</span>
       </div>
       <div class="copy">© <span id="year"></span> Colorado Foxes Futures. All rights reserved.</div>
-      <div class="pro-line">Home of our professional indoor men's team.</div>
+      <div class="pro-line">Home of our professional indoor men's team · MLIS</div>
     </div>
   </footer>
 
@@ -195,29 +644,184 @@
      Change the pro indoor men's team info here; the page renders from it.
      ================================================================ */
   const PRO = {
-    name: "Colorado Foxes Pro Indoor",   // [Placeholder — edit me]
     tagline: "Our youth train under the same crest as a professional team — the pinnacle every Fox aspires to.",
     cards: [
-      { label: "League",   value: "[League name — TBD]" },
-      { label: "Roster",   value: "Roster announced soon — TBD" },
-      { label: "Schedule", value: "Season schedule — dates TBD" }
+      { label: "League",     value: "Major League Indoor Soccer (MLIS)" },
+      { label: "Head Coach", value: "Raymundo Reza" },
+      { label: "Home",       value: "Denver, Colorado" }
+    ]
+  };
+
+  /* ---- PRO TEAM TRYOUTS ----
+     start / end use Denver time (-06:00 = Mountain Daylight Time).
+     After "end" passes, the form is replaced with a "tryouts have ended"
+     message (and the banner on the home page hides itself).
+     Payment is ONLY through payUrl.                                   */
+  const TRYOUT = {
+    start:    "2026-10-24T14:00:00-06:00",
+    end:      "2026-10-24T16:00:00-06:00",
+    dateText: "Saturday, October 24",
+    timeText: "2:00 – 4:00 PM",
+    venue:    "Apex Field House",
+    mapQuery: "Apex Field House Colorado",
+    price:    "$40",
+    payUrl:   "https://royaltysports.org/products/foxes-tryout-at-apex-field-house"
+  };
+
+  /* ---- THE LEAGUE (from mlispro.com) ----
+     Logos live in the /mlis folder. "us: true" highlights our club.  */
+  const LEAGUE = {
+    season: "2026–27",
+    stats: [
+      { value: "2022",    label: "League founded" },
+      { value: "14",      label: "Clubs on MLISpro.com" },
+      { value: "3",       label: "Leagues: MLIS · WMLIS · MLISX" },
+      { value: "2026–27", label: "Current season" }
+    ],
+    clubs: [
+      { name: "Colorado Foxes",          city: "Denver",         logo: "mlis/colorado-foxes.png", us: true },
+      { name: "Atletico Pro FC",         city: "Orlando",        logo: "mlis/atletico-pro-fc.png" },
+      { name: "Bombers",                 city: "Amarillo",       logo: "mlis/bombers.png" },
+      { name: "Bridge City FC",          city: "Pittsburgh",     logo: "mlis/bridge-city-fc.png" },
+      { name: "Canadian Crusaders",      city: "Toronto",        logo: "mlis/canadian-crusaders.png" },
+      { name: "CD La Cuadra",            city: "Dallas",         logo: "mlis/cd-la-cuadra.png" },
+      { name: "Crunch",                  city: "Cleveland",      logo: "mlis/crunch.png" },
+      { name: "Nashville Indoor Soccer", city: "Nashville",      logo: "mlis/nashville.png" },
+      { name: "Red Cedar FC",            city: "Lansing",        logo: "mlis/red-cedar-fc.png" },
+      { name: "Terror",                  city: "Tampa Bay",      logo: "mlis/terror.png" },
+      { name: "Thunder",                 city: "Rockford",       logo: "mlis/thunder.png" },
+      { name: "Turf Monsters",           city: "Las Vegas",      logo: "mlis/turf-monsters.png" },
+      { name: "United FC",               city: "Mesquite",       logo: "mlis/united-fc.png" },
+      { name: "Utah Uprising",           city: "Salt Lake City", logo: "mlis/utah-uprising.png" }
     ]
   };
   /* ===== END EDIT YOUR CONTENT HERE ===== */
 
+  const $ = (id) => document.getElementById(id);
+
+  /* ---- Render pro info + league ---- */
   (function(){
-    document.getElementById("pro-tagline").textContent = PRO.tagline;
-    document.getElementById("pro-grid").innerHTML = PRO.cards.map(c => `
+    $("pro-tagline").textContent = PRO.tagline;
+    $("pro-grid").innerHTML = PRO.cards.map(c => `
       <div class="card">
         <span class="tag">${c.label}</span>
         <p class="meta">${c.value}</p>
       </div>
     `).join("");
-    document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Mobile menu toggle
-    const btn = document.getElementById("menuBtn");
-    const links = document.getElementById("navLinks");
+    $("league-stats").innerHTML = LEAGUE.stats.map(s => `
+      <div class="stat reveal"><b>${s.value}</b><span>${s.label}</span></div>
+    `).join("");
+    $("clubs-heading").textContent = LEAGUE.season + " MLIS Clubs";
+    $("clubs").innerHTML = LEAGUE.clubs.map(c => `
+      <div class="club${c.us ? " us" : ""}">
+        <div class="logo"><img src="${c.logo}" alt="${c.name} logo" loading="lazy"></div>
+        <b>${c.name}</b>
+        <span>${c.city}</span>
+      </div>
+    `).join("");
+
+    $("year").textContent = new Date().getFullYear();
+  })();
+
+  /* ---- Tryouts: details, countdown, form + payment ---- */
+  (function(){
+    const T = TRYOUT;
+    const start = new Date(T.start), end = new Date(T.end);
+    const tz = { timeZone: "America/Denver" };
+
+    $("t-month").textContent   = start.toLocaleString("en-US", { ...tz, month: "short" }).toUpperCase();
+    $("t-day").textContent     = start.toLocaleString("en-US", { ...tz, day: "numeric" });
+    $("t-weekday").textContent = start.toLocaleString("en-US", { ...tz, weekday: "short" });
+    $("t-date").textContent  = T.dateText;
+    $("t-time").textContent  = T.timeText;
+    $("t-venue").textContent = T.venue;
+    $("t-map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(T.mapQuery);
+    $("t-price").textContent = T.price;
+    document.querySelectorAll(".t-price-inline").forEach(el => el.textContent = T.price);
+    $("tryoutSubject").value = "New Pro Tryout registration — " + T.dateText + " (payment pending)";
+    $("payCardBtn").href = T.payUrl;
+
+    // After the tryout ends, close registration
+    if (Date.now() > end) {
+      $("t-countdown").hidden = true;
+      $("tryout-form-area").innerHTML = `
+        <div class="tryout-closed">
+          <h3>Tryouts have ended</h3>
+          <p>Thanks to everyone who came out. Follow us for news on the next tryout.</p>
+        </div>`;
+      return;
+    }
+
+    // Countdown to kickoff
+    function tick(){
+      let ms = Math.max(0, start - Date.now());
+      const d = Math.floor(ms / 864e5); ms -= d * 864e5;
+      const h = Math.floor(ms / 36e5);  ms -= h * 36e5;
+      const m = Math.floor(ms / 6e4);   ms -= m * 6e4;
+      const s = Math.floor(ms / 1e3);
+      $("cd-d").textContent = d;
+      $("cd-h").textContent = String(h).padStart(2, "0");
+      $("cd-m").textContent = String(m).padStart(2, "0");
+      $("cd-s").textContent = String(s).padStart(2, "0");
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // Form → Formspree → payment modal (registration link only)
+    const form = $("tryoutForm");
+    const payModal = $("payModal");
+    const open = () => {
+      $("confirmRow").hidden = true;
+      $("payDone").hidden = true;
+      $("payStep").hidden = false;
+      payModal.classList.add("open");
+      $("payCardBtn").focus();
+    };
+    const close = () => payModal.classList.remove("open");
+
+    $("payCardBtn").addEventListener("click", () => { $("confirmRow").hidden = false; });
+    $("payConfirmBtn").addEventListener("click", () => {
+      $("payStep").hidden = true;
+      $("payDone").hidden = false;
+    });
+    $("payDoneClose").addEventListener("click", close);
+    $("payModalClose").addEventListener("click", close);
+    $("payModalLater").addEventListener("click", close);
+    payModal.addEventListener("click", (e) => { if (e.target === payModal) close(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      try {
+        await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { "Accept": "application/json" }
+        });
+      } catch (err) { /* network issue — still guide them to pay */ }
+      open();
+      form.reset();
+    });
+  })();
+
+  /* ---- Scroll-in reveal animations ---- */
+  (function(){
+    const els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) { els.forEach(el => el.classList.add("in")); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    els.forEach(el => io.observe(el));
+  })();
+
+  /* ---- Mobile menu toggle ---- */
+  (function(){
+    const btn = $("menuBtn");
+    const links = $("navLinks");
     btn.addEventListener("click", () => {
       const open = links.classList.toggle("open");
       btn.setAttribute("aria-expanded", open ? "true" : "false");

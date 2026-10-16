@@ -105,6 +105,116 @@
     section{padding:96px 0;}
     section h2{font-size:clamp(28px,5vw,46px);}
     .lead{color:var(--muted);font-size:18px;max-width:760px;margin:14px 0 0;}
+    /* ============================================================
+       PRO TRYOUTS FEATURE (just under the hero)
+       ============================================================ */
+    #tryout-banner{
+      position:relative;overflow:hidden;padding:110px 0;
+      background:
+        radial-gradient(700px 420px at 85% 45%, rgba(245,166,35,.20), transparent 65%),
+        radial-gradient(600px 400px at 0% 100%, rgba(243,146,0,.10), transparent 65%),
+        linear-gradient(180deg,#0e0e12,#09090b);
+      border-bottom:1px solid var(--line);
+    }
+    /* Diagonal orange stripes in the corner */
+    #tryout-banner::before{
+      content:"";position:absolute;right:-120px;top:-120px;width:520px;height:520px;pointer-events:none;
+      background:repeating-linear-gradient(135deg, rgba(245,166,35,.10) 0 14px, transparent 14px 34px);
+      -webkit-mask-image:radial-gradient(circle at 70% 30%, #000 0%, transparent 65%);
+              mask-image:radial-gradient(circle at 70% 30%, #000 0%, transparent 65%);
+    }
+    /* Giant outlined watermark word */
+    .tb-watermark{
+      position:absolute;left:50%;bottom:-0.18em;transform:translateX(-50%);pointer-events:none;
+      font-family:"Oswald",sans-serif;font-weight:700;text-transform:uppercase;line-height:1;
+      font-size:clamp(120px,22vw,320px);letter-spacing:4px;white-space:nowrap;
+      color:transparent;-webkit-text-stroke:1px rgba(245,166,35,.12);
+    }
+    .tb-grid{position:relative;display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:center;}
+    @media (max-width:960px){.tb-grid{grid-template-columns:1fr;gap:44px;}}
+
+    .tb-live{
+      display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--orange);
+      padding:7px 14px;border-radius:999px;background:rgba(245,166,35,.10);border:1px solid rgba(245,166,35,.35);
+      margin-bottom:22px;
+    }
+    .tb-live i{width:8px;height:8px;border-radius:50%;background:var(--orange);animation:tb-pulse 1.8s infinite;}
+    @keyframes tb-pulse{0%{box-shadow:0 0 0 0 rgba(245,166,35,.6);}70%{box-shadow:0 0 0 10px rgba(245,166,35,0);}100%{box-shadow:0 0 0 0 rgba(245,166,35,0);}}
+    .tb-title{font-size:clamp(54px,8.5vw,108px);line-height:.92;letter-spacing:1px;}
+    .tb-title span{
+      display:block;
+      background:linear-gradient(180deg,#ffd27a,var(--orange) 45%,var(--orange-deep));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .tb-lead{color:rgba(246,246,244,.82);font-size:clamp(17px,2vw,20px);max-width:560px;margin:22px 0 0;}
+
+    .tb-meta{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0;padding:0;list-style:none;}
+    .tb-meta li{
+      display:flex;align-items:center;gap:8px;font-size:15px;color:var(--white);
+      padding:9px 14px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+    }
+    .tb-meta svg{width:17px;height:17px;fill:none;stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .tb-meta b{font-weight:600;}
+
+    .tb-count{display:grid;grid-template-columns:repeat(4,minmax(0,92px));gap:10px;margin-top:30px;}
+    .tb-count div{text-align:center;padding:14px 6px 10px;border-radius:14px;background:#0c0c0f;border:1px solid var(--line);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+    .tb-count b{display:block;font-family:"Oswald",sans-serif;font-size:38px;line-height:1;font-variant-numeric:tabular-nums;}
+    .tb-count span{display:block;margin-top:6px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+
+    .tb-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px;}
+    .tb-cta .btn-primary{font-size:18px;padding:17px 32px;}
+    .tb-cta .btn-ghost{color:var(--white);border-color:rgba(255,255,255,.3);}
+    .tb-cta .btn-ghost:hover{background:rgba(255,255,255,.06);}
+    .tb-note{display:flex;align-items:center;gap:8px;margin-top:16px;font-size:14px;color:var(--muted);}
+    .tb-note svg{width:16px;height:16px;flex:0 0 auto;fill:none;stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+    /* Ticket card */
+    .ticket{
+      position:relative;max-width:400px;margin-left:auto;border-radius:22px;overflow:hidden;
+      background:
+        radial-gradient(360px 240px at 50% 0%, rgba(245,166,35,.22), transparent 70%),
+        linear-gradient(180deg,#1b1b21,#121216);
+      border:1px solid rgba(245,166,35,.4);
+      box-shadow:0 40px 90px rgba(0,0,0,.65), 0 0 60px rgba(243,146,0,.15);
+      transform:rotate(3deg);transition:transform .4s cubic-bezier(.2,.8,.2,1);
+    }
+    .js .ticket.reveal.in{transform:rotate(3deg);}
+    .ticket:hover, .js .ticket.reveal.in:hover{transform:rotate(0deg) translateY(-6px);}
+    @media (max-width:960px){.ticket, .js .ticket.reveal.in{margin:0 auto;transform:none;}}
+    .ticket-top{padding:30px 28px 24px;text-align:center;}
+    .ticket-top .crest{width:120px;height:120px;object-fit:contain;margin:0 auto 14px;border-radius:18px;
+      box-shadow:0 0 0 1px rgba(245,166,35,.3), 0 14px 40px rgba(0,0,0,.6);}
+    .ticket-kicker{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:3px;font-size:13px;color:var(--orange);}
+    .ticket-date{font-family:"Oswald",sans-serif;font-weight:700;text-transform:uppercase;line-height:1;
+      font-size:76px;margin:8px 0 4px;letter-spacing:1px;}
+    .ticket-when{color:var(--white);font-weight:600;font-size:16px;}
+    .ticket-where{color:var(--muted);font-size:15px;margin-top:2px;}
+    /* Perforated tear line with side notches */
+    .ticket-tear{position:relative;height:0;border-top:2px dashed rgba(255,255,255,.16);margin:0 22px;}
+    .ticket-tear::before,.ticket-tear::after{
+      content:"";position:absolute;top:-15px;width:28px;height:28px;border-radius:50%;background:#0b0b0d;
+      border:1px solid rgba(245,166,35,.4);
+    }
+    .ticket-tear::before{left:-38px;}
+    .ticket-tear::after{right:-38px;}
+    .ticket-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 28px 24px;}
+    .ticket-league{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);line-height:1.3;}
+    .ticket-league img{width:44px;height:44px;object-fit:contain;}
+    .ticket-league b{display:block;color:var(--white);font-size:14px;}
+    .ticket-price{text-align:right;}
+    .ticket-price b{display:block;font-family:"Oswald",sans-serif;font-weight:700;font-size:40px;line-height:1;color:var(--orange);}
+    .ticket-price span{font-size:12px;color:var(--muted);}
+
+    @media (max-width:600px){
+      #tryout-banner{padding:72px 0;}
+      .tb-count{grid-template-columns:repeat(4,1fr);}
+      .tb-count b{font-size:30px;}
+      .tb-cta .btn{flex:1 1 100%;}
+      .ticket-date{font-size:60px;}
+    }
+    @media (prefers-reduced-motion:reduce){.tb-live i{animation:none;}.ticket{transition:none;}}
+
     /* Alternate section shade to break up the page rhythm */
     .section-alt{
       background:linear-gradient(180deg,#111115,#0e0e12);
@@ -736,7 +846,56 @@
     </div>
   </section>
 
+  <!-- ============================== PRO TRYOUTS FEATURE ============================== -->
+  <!-- Filled from CONTENT.tryout; hides itself once the tryout has ended. -->
+  <section id="tryout-banner" aria-label="Pro team tryouts">
+    <div class="tb-watermark" aria-hidden="true">Tryouts</div>
+    <div class="wrap">
+      <div class="tb-grid">
+        <div class="reveal">
+          <span class="tb-live"><i></i>Registration open · MLIS Men's Pro Indoor</span>
+          <h2 class="tb-title">Pro Team <span>Tryouts</span></h2>
+          <p class="tb-lead">Think you can play at the professional level? The Colorado Foxes are building their Major League Indoor Soccer roster. Come show us what you've got.</p>
+          <ul class="tb-meta">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg><b id="tb-date"></b></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="tb-time"></span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="tb-venue"></span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><b id="tb-price"></b></li>
+          </ul>
+          <div class="tb-count" aria-label="Time until tryouts">
+            <div><b id="tb-d">0</b><span>Days</span></div>
+            <div><b id="tb-h">00</b><span>Hrs</span></div>
+            <div><b id="tb-m">00</b><span>Min</span></div>
+            <div><b id="tb-s">00</b><span>Sec</span></div>
+          </div>
+          <div class="tb-cta">
+            <a class="btn btn-primary" id="tb-link" href="pro.html#tryouts">Register for Tryouts</a>
+            <a class="btn btn-ghost" href="pro.html">Meet the Pro Team</a>
+          </div>
+          <p class="tb-note"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="tb-note"></span></p>
+        </div>
+
+        <!-- Ticket-style event card -->
+        <a class="ticket reveal" id="tb-ticket" href="pro.html#tryouts" aria-label="Pro team tryout details and registration" style="color:inherit;text-decoration:none;">
+          <div class="ticket-top">
+            <img class="crest" src="logo2.png" alt="">
+            <div class="ticket-kicker">Open Tryout</div>
+            <div class="ticket-date" id="tb-bigdate"></div>
+            <div class="ticket-when" id="tb-when"></div>
+            <div class="ticket-where" id="tb-where"></div>
+          </div>
+          <div class="ticket-tear" aria-hidden="true"></div>
+          <div class="ticket-bottom">
+            <div class="ticket-league"><img src="mlis/mlis-league.png" alt=""><div><b>Colorado Foxes</b>Men's Pro Indoor · MLIS</div></div>
+            <div class="ticket-price"><b id="tb-ticket-price"></b><span>Registration</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================== ABOUT / MISSION ============================== -->
+
   <section id="about">
     <div class="wrap">
       <div class="reveal">
@@ -1046,6 +1205,20 @@
     // Short tagline shown under the club name in the hero
     tagline: "Where every player develops a love for the game.",
 
+    /* ---- PRO TEAM TRYOUTS BANNER (under the hero) ----
+       start / end use Denver time (-06:00 = Mountain Daylight Time).
+       The banner hides itself automatically once "end" has passed.
+       The full form + payment link live on pro.html (TRYOUT block). */
+    tryout: {
+      start:    "2026-10-24T14:00:00-06:00",
+      end:      "2026-10-24T16:00:00-06:00",
+      dateText: "Sat, Oct 24",
+      timeText: "2:00 – 4:00 PM",
+      venue:    "Apex Field House",
+      price:    "$40",
+      link:     "pro.html#tryouts"
+    },
+
     /* ---- PHOTO GALLERY (kids on the field) ----
        To swap a photo, drop a new image in the folder and change "src".
        The FIRST photo is shown large. (kids-6 is also the full-width
@@ -1252,6 +1425,45 @@
     wrap.hidden = false;
     wrap.scrollIntoView({ behavior: "smooth", block: "start" });
   });
+
+
+  /* ---- Pro tryouts banner: fill details, run countdown, hide after the event ---- */
+  (function(){
+    const T = CONTENT.tryout;
+    const section = document.getElementById("tryout-banner");
+    const start = new Date(T.start), end = new Date(T.end);
+    if (Date.now() > end) { section.remove(); return; }
+
+    const $ = (id) => document.getElementById(id);
+    const tz = { timeZone: "America/Denver" };
+    $("tb-bigdate").textContent =
+      start.toLocaleString("en-US", { ...tz, month: "short" }) + " " +
+      start.toLocaleString("en-US", { ...tz, day: "numeric" });
+    $("tb-when").textContent  = start.toLocaleString("en-US", { ...tz, weekday: "long" }) + " · " + T.timeText;
+    $("tb-where").textContent = T.venue;
+    $("tb-ticket-price").textContent = T.price;
+    $("tb-date").textContent  = T.dateText;
+    $("tb-time").textContent  = T.timeText;
+    $("tb-venue").textContent = T.venue;
+    $("tb-price").textContent = T.price + " registration";
+    $("tb-link").href = T.link;
+    $("tb-ticket").href = T.link;
+    $("tb-note").textContent = "You're officially registered once the " + T.price + " fee is paid.";
+
+    function tick(){
+      let ms = Math.max(0, start - Date.now());
+      const d = Math.floor(ms / 864e5); ms -= d * 864e5;
+      const h = Math.floor(ms / 36e5);  ms -= h * 36e5;
+      const m = Math.floor(ms / 6e4);   ms -= m * 6e4;
+      const s = Math.floor(ms / 1e3);
+      $("tb-d").textContent = d;
+      $("tb-h").textContent = String(h).padStart(2, "0");
+      $("tb-m").textContent = String(m).padStart(2, "0");
+      $("tb-s").textContent = String(s).padStart(2, "0");
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
 
 
   /* ---- "Register for X" on a program card → pre-select that program ---- */
