@@ -547,6 +547,12 @@
     .row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
     @media (max-width:560px){.row{grid-template-columns:1fr;}}
     .form-note{color:var(--muted);font-size:14px;margin-top:8px;}
+    .form-error{
+      margin:0 0 14px;padding:12px 14px;border-radius:10px;font-size:14.5px;color:#ffd9d9;
+      background:rgba(220,60,60,.12);border:1px solid rgba(220,60,60,.45);
+    }
+    .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+    button[disabled]{opacity:.6;cursor:wait;}
 
     /* Liability waiver */
     .waiver-box{
@@ -764,6 +770,10 @@
     footer .copy{color:var(--muted);font-size:14px;}
     footer .to-top{color:var(--muted);font-size:14px;}
     footer .to-top:hover{color:var(--orange);text-decoration:none;}
+    /* "Website by" credit */
+    .site-credit{color:var(--muted);font-size:13px;}
+    .site-credit a{color:var(--white);font-weight:600;}
+    .site-credit a:hover{color:var(--orange);text-decoration:none;}
 
     /* Sticky "Register" bar on phones */
     .mobile-cta{
@@ -971,18 +981,17 @@
         <p class="lead" style="font-size:16px;margin-bottom:6px;">Fields marked <span style="color:var(--orange)">*</span> are required.</p>
 
         <!-- ====================================================================
-             FORMSPREE FORM — submissions are emailed to the Formspree account
-             for form mwvjlpgp. All 4 location buttons submit to this ONE form;
+             REGISTRATION FORM — saved to Supabase (see supabase-config.js),
+             viewable on /admin. Every location button uses this ONE form;
              the chosen location is sent in the hidden "location" field below.
              ==================================================================== -->
-        <form id="registerForm"
-              action="https://formspree.io/f/mwvjlpgp"
-              method="POST">
+        <form id="registerForm" novalidate>
 
-          <!-- Email subject line for the notification Formspree sends -->
-          <input type="hidden" name="_subject" value="New Colorado Foxes registration">
           <!-- Auto-filled from the location button the user clicked -->
           <input type="hidden" name="location" id="locationField" value="">
+          <input type="hidden" name="season" id="seasonField" value="">
+          <!-- Spam trap: hidden from people, bots fill it in -->
+          <div class="hp-field" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
           <div class="field">
             <label>Choose a program <span class="req">*</span></label>
@@ -1056,7 +1065,8 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary">Submit Registration</button>
+          <p class="form-error" id="registerError" role="alert" hidden></p>
+          <button type="submit" class="btn btn-primary" id="registerSubmit">Submit Registration</button>
           <p class="form-note">After you submit, you'll choose how to pay to finish registering.</p>
         </form>
       </div>
@@ -1182,6 +1192,7 @@
       </div>
       <div class="footer-bottom">
         <div class="copy" id="footer-copy">© <span id="year"></span> Colorado Foxes Futures. All rights reserved.</div>
+        <div class="site-credit">Website by <a href="https://saenz-tech.com" target="_blank" rel="noopener">SaenzTech</a></div>
         <a class="to-top" href="#top">Back to top ↑</a>
       </div>
     </div>
@@ -1193,6 +1204,8 @@
     <a href="#register" class="btn btn-primary">Register</a>
   </div>
 
+  <!-- Supabase connection + submit helper (shared with pro.html and /admin) -->
+  <script src="supabase-config.js"></script>
   <script>
   /* ================================================================
      ===== EDIT YOUR CONTENT HERE =====
@@ -1204,6 +1217,9 @@
 
     // Short tagline shown under the club name in the hero
     tagline: "Where every player develops a love for the game.",
+
+    // Season name saved with each youth registration (shows in /admin)
+    season: "Fall/Winter 2026",
 
     /* ---- PRO TEAM TRYOUTS BANNER (under the hero) ----
        start / end use Denver time (-06:00 = Mountain Daylight Time).
@@ -1235,7 +1251,7 @@
 
     /* ---- REGISTRATION LOCATIONS ----
        The 4 big buttons in the Register section. Each opens the SAME form;
-       the chosen location is sent to Formspree in the hidden "location" field.
+       the chosen location is saved in the hidden "location" field.
        Each: { name, city, comingSoon? }
        comingSoon: true shows a "Coming Soon" card instead of opening the form. */
     locations: [
@@ -1603,19 +1619,29 @@
     payModal.addEventListener("click", (e) => { if (e.target === payModal) closePayModal(); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePayModal(); });
 
+    // Save to Supabase; only move on to payment once it's actually saved
+    const submitBtn = document.getElementById("registerSubmit");
+    const errorBox = document.getElementById("registerError");
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      errorBox.hidden = true;
       if (!form.checkValidity()) { form.reportValidity(); return; }
 
-      // Send to Formspree only once a real form ID is configured.
-      if (!form.action.includes("REPLACE_WITH_FORM_ID")) {
-        try {
-          await fetch(form.action, {
-            method: "POST",
-            body: new FormData(form),
-            headers: { "Accept": "application/json" }
-          });
-        } catch (err) { /* network issue — still guide them to pay */ }
+      document.getElementById("seasonField").value = CONTENT.season;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+      try {
+        const data = window.foxesFormData(form);
+        const prog = selectedProgram();
+        if (prog) { data.program_detail = data.program; data.program = prog.name; }
+        await window.foxesSubmit("youth", data);
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.hidden = false;
+        return;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Registration";
       }
 
       openPayModal();        // reads the selected program for the pay link first

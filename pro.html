@@ -228,6 +228,12 @@
     .row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
     @media (max-width:560px){.row{grid-template-columns:1fr;}}
     .form-note{color:var(--muted);font-size:14px;margin-top:10px;}
+    .form-error{
+      margin:0 0 14px;padding:12px 14px;border-radius:10px;font-size:14.5px;color:#ffd9d9;
+      background:rgba(220,60,60,.12);border:1px solid rgba(220,60,60,.45);
+    }
+    .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+    button[disabled]{opacity:.6;cursor:wait;}
 
     /* Position picker (pill radios) */
     .pills{display:flex;flex-wrap:wrap;gap:8px;}
@@ -353,6 +359,10 @@
       background:linear-gradient(180deg,#0e0e12,#08080a);}
     footer .brand{justify-content:center;margin-bottom:14px;}
     footer .copy{color:var(--muted);font-size:14px;}
+    /* "Website by" credit */
+    .site-credit{color:var(--muted);font-size:13px;margin-top:14px;}
+    .site-credit a{color:var(--white);font-weight:600;}
+    .site-credit a:hover{color:var(--orange);text-decoration:none;}
     footer .pro-line{color:var(--orange);font-size:13px;margin-top:6px;
       font-family:"Oswald",sans-serif;letter-spacing:1px;text-transform:uppercase;}
 
@@ -470,11 +480,14 @@
               <li><span class="n">2</span><span><b>Pay the <span class="t-price-inline"></span> fee</b>Required to be registered</span></li>
             </ol>
 
-            <!-- Submits to the same Formspree form as youth registration;
-                 "form_type" and the subject line mark it as a pro tryout. -->
-            <form id="tryoutForm" action="https://formspree.io/f/mwvjlpgp" method="POST">
-              <input type="hidden" name="_subject" id="tryoutSubject" value="New Pro Tryout registration">
-              <input type="hidden" name="form_type" value="Pro Team Tryout">
+            <!-- Saved to Supabase as a "tryout" registration (see supabase-config.js),
+                 viewable on /admin. -->
+            <form id="tryoutForm" novalidate>
+              <input type="hidden" name="season" id="tryoutSeason" value="">
+              <input type="hidden" name="program" value="Pro Team Tryout">
+              <input type="hidden" name="location" id="tryoutVenue" value="">
+              <!-- Spam trap: hidden from people, bots fill it in -->
+              <div class="hp-field" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
               <div class="row">
                 <div class="field">
@@ -536,7 +549,8 @@
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-primary" style="width:100%;">Submit &amp; Continue to Payment</button>
+              <p class="form-error" id="tryoutError" role="alert" hidden></p>
+              <button type="submit" class="btn btn-primary" id="tryoutSubmit" style="width:100%;">Submit &amp; Continue to Payment</button>
               <p class="form-note">Submitting saves your info. <strong style="color:var(--white)">You are only officially registered once the <span class="t-price-inline"></span> fee is paid</strong> through our secure registration link.</p>
             </form>
           </div>
@@ -635,9 +649,12 @@
       </div>
       <div class="copy">© <span id="year"></span> Colorado Foxes Futures. All rights reserved.</div>
       <div class="pro-line">Home of our professional indoor men's team · MLIS</div>
+      <div class="site-credit">Website by <a href="https://saenz-tech.com" target="_blank" rel="noopener">SaenzTech</a></div>
     </div>
   </footer>
 
+  <!-- Supabase connection + submit helper (shared with index.html and /admin) -->
+  <script src="supabase-config.js"></script>
   <script>
   /* ================================================================
      ===== EDIT YOUR CONTENT HERE  (Pro Team page) =====
@@ -739,7 +756,8 @@
     $("t-map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(T.mapQuery);
     $("t-price").textContent = T.price;
     document.querySelectorAll(".t-price-inline").forEach(el => el.textContent = T.price);
-    $("tryoutSubject").value = "New Pro Tryout registration — " + T.dateText + " (payment pending)";
+    $("tryoutSeason").value = "Pro Tryout — " + T.dateText + ", " + start.getFullYear();
+    $("tryoutVenue").value = T.venue;
     $("payCardBtn").href = T.payUrl;
 
     // After the tryout ends, close registration
@@ -791,16 +809,25 @@
     payModal.addEventListener("click", (e) => { if (e.target === payModal) close(); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
 
+    // Save to Supabase; only move on to payment once it's actually saved
+    const submitBtn = $("tryoutSubmit");
+    const errorBox = $("tryoutError");
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      errorBox.hidden = true;
       if (!form.checkValidity()) { form.reportValidity(); return; }
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
       try {
-        await fetch(form.action, {
-          method: "POST",
-          body: new FormData(form),
-          headers: { "Accept": "application/json" }
-        });
-      } catch (err) { /* network issue — still guide them to pay */ }
+        await window.foxesSubmit("tryout", window.foxesFormData(form));
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.hidden = false;
+        return;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit & Continue to Payment";
+      }
       open();
       form.reset();
     });
