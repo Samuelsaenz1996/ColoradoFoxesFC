@@ -503,11 +503,11 @@
         payUrl: "https://royaltysports.org/products/vip-season-ticket"
       },
       {
-        name: "GA Season Ticket",
+        name: "Standard Season Ticket",
         price: "$150",
         featured: false,
         perks: [
-          "General admission seating at all home games",
+          "Standard seating at all home games",
           "Access to away-game viewing parties",
           "10% off all Colorado Foxes merchandise",
           "Official Colorado Foxes T-shirt"
@@ -563,7 +563,7 @@
       <div class="ticket-tier${tk.featured ? " featured" : ""}">
         ${tk.featured ? '<span class="tt-badge">Best value</span>' : ''}
         <div class="tt-head">
-          <span class="tt-kicker">${tk.featured ? "VIP Experience" : "General Admission"}</span>
+          <span class="tt-kicker">${tk.featured ? "VIP Experience" : "Standard Season"}</span>
           <div class="tt-name">${short}</div>
           <div class="tt-price">${tk.price}<small>/ full season</small></div>
         </div>
