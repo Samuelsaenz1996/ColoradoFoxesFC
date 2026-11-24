@@ -106,32 +106,46 @@
     section h2{font-size:clamp(28px,5vw,46px);}
     .lead{color:var(--muted);font-size:18px;max-width:760px;margin:14px 0 0;}
     /* ============================================================
-       SEASON TICKETS FEATURE (just under the hero)
+       SEASON TICKETS HERO (first thing you see)
        ============================================================ */
     #tickets-banner{
-      position:relative;overflow:hidden;padding:110px 0;
+      position:relative;overflow:hidden;
+      min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+      padding:132px 0 96px;
       background:
-        radial-gradient(700px 420px at 85% 45%, rgba(245,166,35,.20), transparent 65%),
-        radial-gradient(600px 400px at 0% 100%, rgba(243,146,0,.10), transparent 65%),
-        linear-gradient(180deg,#0e0e12,#09090b);
-      border-bottom:1px solid var(--line);
+        radial-gradient(760px 480px at 82% 38%, rgba(245,166,35,.26), transparent 62%),
+        radial-gradient(620px 440px at -5% 105%, rgba(243,146,0,.14), transparent 60%),
+        radial-gradient(900px 600px at 50% -10%, rgba(245,166,35,.08), transparent 70%),
+        linear-gradient(180deg,#0d0d11,#070708);
     }
     /* Diagonal orange stripes in the corner */
     #tickets-banner::before{
-      content:"";position:absolute;right:-120px;top:-120px;width:520px;height:520px;pointer-events:none;
-      background:repeating-linear-gradient(135deg, rgba(245,166,35,.10) 0 14px, transparent 14px 34px);
+      content:"";position:absolute;right:-120px;top:-80px;width:620px;height:620px;pointer-events:none;
+      background:repeating-linear-gradient(135deg, rgba(245,166,35,.12) 0 14px, transparent 14px 34px);
       -webkit-mask-image:radial-gradient(circle at 70% 30%, #000 0%, transparent 65%);
               mask-image:radial-gradient(circle at 70% 30%, #000 0%, transparent 65%);
     }
     /* Giant outlined watermark word */
     .tb-watermark{
-      position:absolute;left:50%;bottom:-0.18em;transform:translateX(-50%);pointer-events:none;
+      position:absolute;left:50%;bottom:-0.16em;transform:translateX(-50%);pointer-events:none;
       font-family:"Oswald",sans-serif;font-weight:700;text-transform:uppercase;line-height:1;
-      font-size:clamp(120px,22vw,320px);letter-spacing:4px;white-space:nowrap;
-      color:transparent;-webkit-text-stroke:1px rgba(245,166,35,.12);
+      font-size:clamp(130px,24vw,360px);letter-spacing:4px;white-space:nowrap;
+      color:transparent;-webkit-text-stroke:1px rgba(245,166,35,.13);
     }
-    .tb-grid{position:relative;display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:center;}
+    .tb-grid{position:relative;display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:center;flex:1;}
     @media (max-width:960px){.tb-grid{grid-template-columns:1fr;gap:44px;}}
+
+    /* Scroll cue down to the youth club hero */
+    .tb-scroll{
+      position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;
+      margin:52px auto 0;width:max-content;color:var(--muted);font-size:13px;letter-spacing:1.5px;
+      text-transform:uppercase;font-family:"Oswald",sans-serif;
+    }
+    .tb-scroll:hover{color:var(--orange);text-decoration:none;}
+    .tb-scroll svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+      animation:tb-bob 1.8s ease-in-out infinite;}
+    @keyframes tb-bob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+    @media (max-width:960px){.tb-scroll{margin-top:40px;}}
 
     .tb-live{
       display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--orange);
@@ -140,7 +154,7 @@
     }
     .tb-live i{width:8px;height:8px;border-radius:50%;background:var(--orange);animation:tb-pulse 1.8s infinite;}
     @keyframes tb-pulse{0%{box-shadow:0 0 0 0 rgba(245,166,35,.6);}70%{box-shadow:0 0 0 10px rgba(245,166,35,0);}100%{box-shadow:0 0 0 0 rgba(245,166,35,0);}}
-    .tb-title{font-size:clamp(54px,8.5vw,108px);line-height:.92;letter-spacing:1px;}
+    .tb-title{font-size:clamp(58px,9vw,120px);line-height:.9;letter-spacing:1px;}
     .tb-title span{
       display:block;
       background:linear-gradient(180deg,#ffd27a,var(--orange) 45%,var(--orange-deep));
@@ -203,7 +217,7 @@
       .tb-cta .btn{flex:1 1 100%;}
       .ticket-date{font-size:60px;}
     }
-    @media (prefers-reduced-motion:reduce){.tb-live i{animation:none;}.ticket{transition:none;}}
+    @media (prefers-reduced-motion:reduce){.tb-live i{animation:none;}.ticket{transition:none;}.tb-scroll svg{animation:none;}}
 
     /* Alternate section shade to break up the page rhythm */
     .section-alt{
@@ -827,26 +841,7 @@
 
   <span id="top"></span>
 
-  <!-- ============================== HERO ============================== -->
-  <section class="hero" id="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="wrap">
-      <img class="crest" src="logo2.png" alt="Colorado Foxes Futures crest — shield with mountains">
-      <h1>Colorado <span class="accent">Foxes</span> Futures</h1>
-      <p class="tagline" id="hero-tagline">Where every player develops a love for the game.</p>
-      <div class="hero-cta">
-        <a href="#register" class="btn btn-primary">Register Now</a>
-        <a href="#programs" class="btn btn-ghost">View Programs</a>
-      </div>
-      <ul class="hero-facts">
-        <li><b>Ages 3–13</b></li>
-        <li>Fall/Winter season enrolling</li>
-        <li>Montbello · Denver South</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============================== SEASON TICKETS FEATURE ============================== -->
+  <!-- ============================== SEASON TICKETS HERO (first thing you see) ============================== -->
   <section id="tickets-banner" aria-label="Pro team season tickets">
     <div class="tb-watermark" aria-hidden="true">Tickets</div>
     <div class="wrap">
@@ -862,7 +857,7 @@
           </ul>
           <div class="tb-cta">
             <a class="btn btn-primary" href="pro.html#tickets">Get Season Tickets</a>
-            <a class="btn btn-ghost" href="pro.html">Meet the Pro Team</a>
+            <a class="btn btn-ghost" href="#hero">Explore the Youth Club</a>
           </div>
         </div>
 
@@ -882,6 +877,29 @@
           </div>
         </a>
       </div>
+      <a class="tb-scroll" href="#hero" aria-label="Scroll to the youth club">
+        <span>Colorado Foxes Futures — youth club</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================== YOUTH CLUB HERO ============================== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <img class="crest" src="logo2.png" alt="Colorado Foxes Futures crest — shield with mountains">
+      <h1>Colorado <span class="accent">Foxes</span> Futures</h1>
+      <p class="tagline" id="hero-tagline">Where every player develops a love for the game.</p>
+      <div class="hero-cta">
+        <a href="#register" class="btn btn-primary">Register Now</a>
+        <a href="#programs" class="btn btn-ghost">View Programs</a>
+      </div>
+      <ul class="hero-facts">
+        <li><b>Ages 3–13</b></li>
+        <li>Fall/Winter season enrolling</li>
+        <li>Montbello · Denver South</li>
+      </ul>
     </div>
   </section>
 
