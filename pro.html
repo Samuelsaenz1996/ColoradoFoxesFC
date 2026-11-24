@@ -353,6 +353,40 @@
       background:linear-gradient(180deg,var(--orange),var(--orange-deep));box-shadow:0 10px 24px rgba(243,146,0,.3);}
 
     /* ============================================================
+       SEASON TICKETS
+       ============================================================ */
+    .ticket-tiers{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:40px;}
+    @media (max-width:760px){.ticket-tiers{grid-template-columns:1fr;max-width:460px;margin-left:auto;margin-right:auto;}}
+    .ticket-tier{
+      position:relative;display:flex;flex-direction:column;
+      border-radius:18px;border:1px solid var(--line);padding:30px 28px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .ticket-tier:hover{transform:translateY(-4px);border-color:rgba(245,166,35,.45);box-shadow:var(--shadow);}
+    .ticket-tier.featured{
+      border-color:rgba(245,166,35,.6);
+      box-shadow:0 0 0 3px rgba(245,166,35,.15), var(--shadow);
+      background:
+        radial-gradient(420px 220px at 100% 0%, rgba(245,166,35,.14), transparent 70%),
+        linear-gradient(180deg,var(--panel),var(--panel-2));
+    }
+    .ticket-tier.featured::after{
+      content:"Best value";position:absolute;top:-11px;right:24px;
+      font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:1px;
+      font-size:11px;font-weight:700;color:#1a1206;
+      background:linear-gradient(180deg,var(--orange),var(--orange-deep));
+      padding:4px 12px;border-radius:999px;
+    }
+    .ticket-tier h3{font-size:26px;}
+    .ticket-price{font-family:"Oswald",sans-serif;font-weight:700;font-size:52px;line-height:1;margin:10px 0 4px;}
+    .ticket-price small{font-family:"Inter",sans-serif;font-weight:400;font-size:15px;color:var(--muted);margin-left:6px;}
+    .ticket-perks{list-style:none;margin:18px 0 26px;padding:18px 0 0;border-top:1px solid var(--line);display:grid;gap:12px;}
+    .ticket-perks li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;color:var(--white);}
+    .ticket-perks svg{width:18px;height:18px;flex:0 0 auto;margin-top:3px;fill:none;stroke:var(--orange);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+    .ticket-tier .btn{margin-top:auto;align-self:stretch;text-align:center;}
+
+    /* ============================================================
        FOOTER
        ============================================================ */
     footer{border-top:1px solid var(--line);padding:44px 0;text-align:center;
@@ -393,6 +427,7 @@
         <a href="pro.html" class="active">Pro Team</a>
         <a href="#tryouts">Tryouts</a>
         <a href="#league">The League</a>
+        <a href="#tickets">Tickets</a>
         <a href="index.html#contact">Contact</a>
         <a href="index.html#register" class="nav-cta">Youth Register</a>
       </nav>
@@ -585,6 +620,19 @@
     </div>
   </section>
 
+  <!-- ============================== SEASON TICKETS ============================== -->
+  <section id="tickets">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">Season Tickets</span>
+        <h2 id="tickets-heading">2026–27 Season Tickets</h2>
+        <p class="lead" id="tickets-sub"></p>
+      </div>
+      <div class="ticket-tiers reveal" id="ticket-tiers"></div>
+      <p class="league-source">Tickets are sold securely through our Royalty Sports store. You'll be taken there to complete your purchase.</p>
+    </div>
+  </section>
+
   <!-- ============================== PRO DETAILS ============================== -->
   <section class="section-alt">
     <div class="wrap">
@@ -712,6 +760,41 @@
       { name: "Utah Uprising",           city: "Salt Lake City", logo: "mlis/utah-uprising.png" }
     ]
   };
+
+  /* ---- SEASON TICKETS ----
+     Two fixed-price tickets sold through Royalty Sports' checkout.
+     To change a price, perk, or link, edit it here.
+     Each: { name, price, perks[], payUrl, featured? }                */
+  const SEASON_TICKETS = {
+    heading: "2026–27 Season Tickets",
+    sub: "Back the Foxes all season long. Secure your seat for all 6 home games.",
+    tiers: [
+      {
+        name: "VIP Season Ticket",
+        price: "$200",
+        featured: true,
+        perks: [
+          "Exclusive VIP section seating at all 6 home games",
+          "VIP access to away-game viewing parties",
+          "Official Colorado Foxes T-shirt",
+          "Official Colorado Foxes supporters scarf"
+        ],
+        payUrl: "https://royaltysports.org/products/vip-season-ticket"
+      },
+      {
+        name: "GA Season Ticket",
+        price: "$150",
+        featured: false,
+        perks: [
+          "General admission seating at all home games",
+          "Access to away-game viewing parties",
+          "10% off all Colorado Foxes merchandise",
+          "Official Colorado Foxes T-shirt"
+        ],
+        payUrl: "https://royaltysports.org/products/ga-season-ticket"
+      }
+    ]
+  };
   /* ===== END EDIT YOUR CONTENT HERE ===== */
 
   const $ = (id) => document.getElementById(id);
@@ -735,6 +818,21 @@
         <div class="logo"><img src="${c.logo}" alt="${c.name} logo" loading="lazy"></div>
         <b>${c.name}</b>
         <span>${c.city}</span>
+      </div>
+    `).join("");
+
+    // Season tickets
+    const TCHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+    $("tickets-heading").textContent = SEASON_TICKETS.heading;
+    $("tickets-sub").textContent = SEASON_TICKETS.sub;
+    $("ticket-tiers").innerHTML = SEASON_TICKETS.tiers.map(tk => `
+      <div class="ticket-tier${tk.featured ? " featured" : ""}">
+        <h3>${tk.name}</h3>
+        <div class="ticket-price">${tk.price}<small>/ season</small></div>
+        <ul class="ticket-perks">
+          ${tk.perks.map(p => `<li>${TCHECK}<span>${p}</span></li>`).join("")}
+        </ul>
+        <a class="btn btn-primary" href="${tk.payUrl}" target="_blank" rel="noopener">Buy ${tk.name.replace(" Season Ticket","")} — ${tk.price}</a>
       </div>
     `).join("");
 
