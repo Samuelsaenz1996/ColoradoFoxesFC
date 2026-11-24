@@ -70,15 +70,15 @@
        ============================================================ */
     header.nav{position:sticky;top:0;z-index:100;background:rgba(11,11,13,.86);
       backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;}
-    .brand{display:flex;align-items:center;gap:12px;min-width:0;}
-    .brand img{height:42px;width:42px;object-fit:contain;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;height:68px;}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0;flex-shrink:0;}
+    .brand img{height:42px;width:42px;object-fit:contain;flex-shrink:0;}
     .brand .wordmark{font-family:"Oswald",sans-serif;text-transform:uppercase;font-weight:700;
       letter-spacing:1px;font-size:18px;color:var(--white);white-space:nowrap;}
     .brand .wordmark span{color:var(--orange);}
-    nav.links{display:flex;align-items:center;gap:8px;}
+    nav.links{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;}
     nav.links a{color:var(--white);font-family:"Oswald",sans-serif;text-transform:uppercase;
-      letter-spacing:1px;font-size:15px;padding:8px 12px;border-radius:8px;}
+      letter-spacing:.5px;font-size:14.5px;padding:8px 11px;border-radius:8px;white-space:nowrap;}
     nav.links a:hover{color:var(--orange);text-decoration:none;background:rgba(255,255,255,.04);}
     nav.links a.active{color:var(--orange);}
     nav.links a.nav-cta{background:linear-gradient(180deg,var(--orange),var(--orange-deep));
@@ -86,15 +86,14 @@
     nav.links a.nav-cta:hover{color:#1a1206;}
     .menu-btn{display:none;background:transparent;border:1px solid var(--line);color:var(--white);
       border-radius:8px;padding:8px 12px;cursor:pointer;font-size:20px;line-height:1;}
-    @media (max-width:880px){
+    @media (max-width:1024px){
       nav.links{position:absolute;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;
         gap:0;background:var(--near-black);border-bottom:1px solid var(--line);
         padding:8px 12px 16px;display:none;}
       nav.links.open{display:flex;}
-      nav.links a{padding:14px 10px;border-bottom:1px solid var(--line);border-radius:0;}
+      nav.links a{padding:14px 10px;border-bottom:1px solid var(--line);border-radius:0;font-size:16px;letter-spacing:1px;}
       nav.links a.nav-cta{margin:10px 0 0;text-align:center;border-radius:8px;}
       .menu-btn{display:inline-block;}
-      .brand .wordmark{font-size:16px;white-space:normal;}
     }
 
     /* ============================================================
@@ -334,11 +333,12 @@
       <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
       <nav class="links" id="navLinks">
         <a href="index.html">Home</a>
-        <a href="pro.html" class="active">Pro Team</a>
-        <a href="#league">The League</a>
         <a href="#tickets">Season Tickets</a>
+        <a href="index.html#programs">Programs</a>
+        <a href="pro.html" class="active">Pro Team</a>
+        <a href="index.html#camps">Camps</a>
         <a href="index.html#contact">Contact</a>
-        <a href="index.html#register" class="nav-cta">Youth Register</a>
+        <a href="index.html#register" class="nav-cta">Register</a>
       </nav>
     </div>
   </header>
